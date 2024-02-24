@@ -17,7 +17,9 @@ export default function Page (){
     const router = useRouter();
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
 
-    removeCookieUser(USER_COOKIE, {path: "/"});
+    React.useEffect(()=> {
+        removeCookieUser(USER_COOKIE, {path: "/"});
+    }, []);
 
     const handleSubmitLogin = async (values : LoginFormValues) => {
         const result = await ApiLoginUser(values.Email, values.Password);

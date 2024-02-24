@@ -7,7 +7,7 @@ export interface JsonBody {
 }
 
 export interface User {
-    UserID: string,
+    UserID: number,
     FullName: string,
     Email: string,
     Password: string,
@@ -16,9 +16,30 @@ export interface User {
     Token: string,
 }
 
+export interface Party {
+    partyID: number,
+    partyName: string,
+    address: string,
+    type: string,
+    description: string,
+    image: string,
+    hostUserId: number,
+}
+
+
 export interface UserInfoCookie{
-    userID: string;
+    userID: number;
     email: string;
     token: string;
     role: string;
+}
+
+export interface PartyType{
+    label: string;
+    value: string;
+}
+
+export interface ButtonPagination {
+    page: number;
+    isActive: boolean;
 }
