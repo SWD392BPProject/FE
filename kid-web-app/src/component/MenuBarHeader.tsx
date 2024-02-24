@@ -1,12 +1,47 @@
 'use client'
+import { USER_COOKIE } from "@/common/Constant";
+import { UserInfoCookie } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
+import { useCookies } from "react-cookie";
 export default function MenuBarHeader(){
+    const pathname = usePathname()
+    const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
+    const [isLogged, setIsLogged] = React.useState(false);
+    const [email, setEmail] = React.useState("");
+    const [isAdminRoute, setIsAdminRoute] = React.useState<boolean>(
+        pathname.startsWith('/admin/')
+    );
+    const [isHostRoute, setIsHostRoute] = React.useState<boolean>(
+        pathname.startsWith('/host/')
+    );
+    
 
     React.useEffect(()=>{
         require("bootstrap/dist/js/bootstrap.bundle.min.js");
     }, []);
+
+    React.useEffect(() => {
+        setIsAdminRoute(pathname.startsWith('/admin/'));
+        setIsHostRoute(pathname.startsWith('/host/'));
+    }, [pathname]);
+
+    React.useEffect(()=>{
+        require("bootstrap/dist/js/bootstrap.bundle.min.js");
+        function isLogined(){
+            const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
+            if(userInfoCookie){
+                setEmail(userInfoCookie.email);
+                setIsLogged(true);
+            }else{
+                setIsLogged(false);
+                setEmail('');
+            }
+        }
+        isLogined();
+    },[cookieUser]);
 
     return(
         <div className="bg-white">
@@ -31,7 +66,7 @@ export default function MenuBarHeader(){
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center">
-                        <Link href={"/register"}><span className="text-primary cursor-pointer">Đăng ký |</span></Link>
+                        <Link href={"/login"}><span className="text-primary cursor-pointer">{isLogged?"Đăng xuất":"Đăng nhập"} |</span></Link>
                         <span className="ms-2 text-danger cursor-pointer">Giỏ hàng</span>
                     </div>
                 </div>
@@ -46,28 +81,51 @@ export default function MenuBarHeader(){
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                            <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Thương hiệu</a>
-                            </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">TP Dinh dưỡng</a>
-                                <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href="#">Vitamin</a></li>
-                                <li><a className="dropdown-item" href="#">Khoáng chất</a></li>
-                                <li><a className="dropdown-item" href="#">Thảo dược</a></li>
-                                </ul>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Mỹ phẩm thiên nhiên</a>
-                            </li>  
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Thể thao</a>
-                            </li>  
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Cẩm nang sức khỏe</a>
-                            </li>
-                            </ul>
+                            <div className="row w-100">
+                                <div className="col-12 col-sm-12 col-md-8">
+                                    <ul className="navbar-nav">
+                                        {isAdminRoute && (
+                                            <>
+                                               <li className="nav-item">
+                                                    <a className="nav-link" href="#">Dashboard</a>
+                                                </li> 
+                                            </>
+                                        ) || isHostRoute && (
+                                            <>
+                                               <li className="nav-item">
+                                                    <a className="nav-link" href="#">Party</a>
+                                                </li> 
+                                            </>
+                                        ) ||(
+                                            <>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="#">Thương hiệu</a>
+                                                </li>
+                                                <li className="nav-item dropdown">
+                                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">TP Dinh dưỡng</a>
+                                                    <ul className="dropdown-menu">
+                                                    <li><a className="dropdown-item" href="#">Vitamin</a></li>
+                                                    <li><a className="dropdown-item" href="#">Khoáng chất</a></li>
+                                                    <li><a className="dropdown-item" href="#">Thảo dược</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <a className="nav-link" href="#">Mỹ phẩm thiên nhiên</a>
+                                                </li>  
+                                            </>
+                                        )}
+                                        
+                                    </ul>
+                                </div>
+                                {email && (
+                                    <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-end">
+                                        <span>Welcome: </span>
+                                        <Link href="#" className="text-decoration-underline ms-3">{email}</Link>
+                                    </div>
+                                )}
+                                
+                            </div>
+                            
                         </div>
                         </div>
                     </nav>

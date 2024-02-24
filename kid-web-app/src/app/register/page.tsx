@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import { Button } from "@mui/material";
 import React from "react";
 import Link from "next/link";
@@ -8,70 +9,139 @@ import { FormikProps } from "formik";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constant";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { ApiRegisterUser } from "@/service/UserService";
 export default function Page (){
     const formikRef = React.useRef<FormikProps<RegisterFormValues>>(null);
     const router = useRouter();
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
+    const [thumbnailImage, setThumbnailImage] = React.useState<File | null>(null);
+    const [thumbnailImageSrc, setThumbnailImageSrc] = React.useState<string | undefined>(undefined);
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
-    async function registerUser(username: string, email: string, password: string) {
-        
-    }
+    const handleAddPhotoClick = () => {
+        if (inputRef.current) {
+            inputRef.current.click();
+        }
+    };
 
     const handleSubmitRegister = async (values : RegisterFormValues) => {
-        // const result = await ApiRegisterUser(values.username,  values.email, values.password);
-        // if(result?.code==STATUS_CODE_OK){
-        //     setCookieUser(USER_COOKIE, result.data, {path: "/"});
-        //     router.push("/");
-        // }
-        // else if(result?.code==STATUS_CODE_ERROR){
-        //     alert(result.message);
-        // }
-        // else {
-        //     alert("Sign up failed!");
-        // }
+        const result = await ApiRegisterUser(values.FullName, values.Email, values.Password, values.PhoneNumber, values.Role, thumbnailImage);
+        console.log(result);
+        if(result?.code==STATUS_CODE_OK){
+            alert("Create an account successfully!");
+            setCookieUser(USER_COOKIE, result.data, {path: "/"});
+            router.push("/");
+        }
+        else if(result?.code==STATUS_CODE_ERROR){
+            alert(result.message);
+        }
+        else {
+            alert("Sign up failed!");
+        }
     }
     
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            setThumbnailImage(files[0]);
+            const imageUrl = URL.createObjectURL(files[0]);
+            setThumbnailImageSrc(imageUrl);
+        }
+    };
+
     return(
         <div className="d-flex justify-content-center row mt-5">
-        <div className="mt-5 col-12 col-sm-12 col-md-3">
-            <h2 className="text-center">SIGN UP</h2>
+        <div className="mt-5 col-12 col-sm-12 col-md-6">
+            <h1 className="fw-bold mb-3 text-danger">CREATE AN <span className="text-dark">ACCOUNT</span></h1>
             <Formik 
             initialValues={{
-                username: '',
-                email: '',
-                password: '',
-                confirm_password: ''
+                Role: 'User',
+                FullName: '',
+                PhoneNumber: '',
+                Email: '',
+                Password: '',
+                ConfirmPassword: ''
             }}
             validationSchema={RegisterValidateSchema}
             onSubmit={values=>handleSubmitRegister(values)}
             innerRef={formikRef}>
                 {({ errors, touched }) => (
                 <Form>
-                    <div className="form-group">
-                        <Field name="username" className="form-control py-2" placeholder="Enter your username" required/>
-                        {errors.username && touched.username ? (
-                            <div className="fw-bold text-danger">{errors.username}</div>
+                    <div className="row">
+                        <div className="col-12 col-sm-12 col-md-8">
+                            <div className="form-group">
+                                <label htmlFor="FullName" className="fw-bold">Full name:</label>
+                                <Field name="FullName" className="form-control py-2 mt-2" placeholder="Input your name" required/>
+                                {errors.FullName && touched.FullName ? (
+                                    <div className="fw-bold text-danger">{errors.FullName}</div>
+                                ) : null}
+                            </div>
+                            <div className="form-group mt-2">
+                                <label htmlFor="Email" className="fw-bold">Email:</label>
+                                <Field name="Email" type="email" className="form-control py-2 mt-2" placeholder="Input your email" required />
+                                {errors.Email && touched.Email ? (
+                                    <div className="fw-bold text-danger">{errors.Email}</div>
+                                ) : null}
+                            </div>
+                        </div>
+                        <div className="col-12 col-sm-12 col-md-4">
+                            <div className="w-100" style={{height:150, maxWidth:250}}>
+                                <label htmlFor="Avatar" className="fw-bold">Avatar:</label>
+                                {
+                                    thumbnailImageSrc && (
+                                        <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-90" onClick={handleAddPhotoClick}>
+                                            <Image alt={""} width={400} height={400} src={thumbnailImageSrc} className="image-fit w-100 h-100"/>
+                                        </div>
+                                    ) || (
+                                        <div className="d-flex justify-content-center align-items-center w-100 h-100 border-radius-black h-90" onClick={handleAddPhotoClick}>
+                                            <AddAPhotoIcon style={{fontSize:56}} />
+                                        </div>
+                                    )
+                                }
+                           </div>
+                        </div>
+                        <div className="d-none">
+                            <Field type="file" name="thumbnail_image" className="form-control" onChange={handleFileChange} innerRef={inputRef} />
+                        </div>
+                    </div>
+                    <div className="form-group mt-2">
+                        <label htmlFor="PhoneNumber" className="fw-bold">Phone Number:</label>
+                        <Field name="PhoneNumber" type="number" className="form-control py-2 mt-2" placeholder="Input your phone number" required/>
+                        {errors.PhoneNumber && touched.PhoneNumber ? (
+                            <div className="fw-bold text-danger">{errors.PhoneNumber}</div>
                         ) : null}
                     </div>
                     <div className="form-group mt-2">
-                        <Field name="email" type="email" className="form-control py-2" placeholder="Enter your email" required />
-                        {errors.email && touched.email ? (
-                            <div className="fw-bold text-danger">{errors.email}</div>
+                        <label htmlFor="Password" className="fw-bold">Password:</label>
+                        <Field name="Password" type="password" className="form-control py-2 mt-2" placeholder="Input your password" required/>
+                        {errors.Password && touched.Password ? (
+                            <div className="fw-bold text-danger">{errors.Password}</div>
                         ) : null}
                     </div>
                     <div className="form-group mt-2">
-                        <Field name="password" type="password" className="form-control py-2" placeholder="Enter your password" required/>
-                        {errors.password && touched.password ? (
-                            <div className="fw-bold text-danger">{errors.password}</div>
+                        <label htmlFor="ConfirmPassword" className="fw-bold">Confirm-Password:</label>
+                        <Field name="ConfirmPassword" type="password" className="form-control py-2 mt-2" placeholder="Input confirm password" required/>
+                        {errors.ConfirmPassword && touched.ConfirmPassword ? (
+                            <div className="fw-bold text-danger">{errors.ConfirmPassword}</div>
                         ) : null}
                     </div>
                     <div className="form-group mt-2">
-                        <Field name="confirm_password" type="password" className="form-control py-2" placeholder="Enter confirm password" required/>
-                        {errors.confirm_password && touched.confirm_password ? (
-                            <div className="fw-bold text-danger">{errors.confirm_password}</div>
-                        ) : null}
+                        <label htmlFor="Role" className="fw-bold">Register as:</label>
+                        <div className="d-flex align-items-center mt-2">
+                            <div role="group" aria-labelledby="my-radio-group">
+                                <label>
+                                <Field type="radio" className="form-check-input me-2" name="Role" value="User"/>
+                                    Customer
+                                </label>
+                                <label className="ms-2">
+                                <Field type="radio" className="form-check-input me-2" name="Role" value="Host" />
+                                    Host Party
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <button className="btn btn-danger mt-3 w-100">REGISTER NOW</button>
+                    <button type="submit" className="btn btn-danger mt-3 w-100">REGISTER NOW</button>
                 </Form>
             )}
             </Formik>
@@ -85,28 +155,34 @@ export default function Page (){
 }
 
 const RegisterValidateSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(6,'username must be at least 3 characters')  
-      .max(50, 'username maximum 50 characters')
-      .required('Please enter username.'),
-    email: Yup.string()
-      .email('Invalid email format')
-      .required('Please enter username.'),
-    password: Yup.string()
-      .min(6,'password must be > 6')  
-      .max(50, 'password maximum 50 characters')
-      .required('Please enter password.'),
-    confirm_password: Yup.string()
-      .oneOf([Yup.ref('password'), undefined], 'Passwords must match') // Check if it matches the 'password' field
-      .min(6,'password must be > 6')  
-      .max(50, 'password maximum 50 characters')
-      .required('Please enter password.'),
+    FullName: Yup.string()
+      .min(6,'FullName must be at least 3 characters')  
+      .max(50, 'FullName maximum 50 characters')
+      .required('Please enter FullName.'),
+    Email: Yup.string()
+      .email('Invalid Email format')
+      .required('Please enter Email.'),
+    PhoneNumber: Yup.string()
+      .min(9,'PhoneNumber must be > 9')
+      .max(13,'PhoneNumber must be < 13')
+      .required('Please enter PhoneNumber.'),
+    Password: Yup.string()
+      .min(6,'Password must be > 6')  
+      .max(50, 'Password maximum 50 characters')
+      .required('Please enter Password.'),
+    ConfirmPassword: Yup.string()
+      .oneOf([Yup.ref('Password'), undefined], 'Passwords must match') // Check if it matches the 'password' field
+      .min(6,'Password must be > 6')  
+      .max(50, 'Password maximum 50 characters')
+      .required('Please enter ConfirmPassword.'),
 });
 
 interface RegisterFormValues {
-    username: string;
-    email: string;
-    password: string;
-    confirm_password: string
+    FullName: string;
+    Role: string;
+    Email: string;
+    PhoneNumber: string;
+    Password: string;
+    ConfirmPassword: string
 }
 

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import 'bootstrap/dist/css/bootstrap.css'; // Add this line
 import "./globals.css";
 import MenuBarHeader from "@/component/MenuBarHeader";
+import FooterCommon from "@/component/FooterCommon";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,12 @@ export default function RootLayout({
         <MenuBarHeader />
 
         {/* CONTENT BODY */}
-        <div className="container-fluid" style={{minHeight: '100vh'}}>
+        <div className="container-fluid" style={{minHeight: '60vh'}}>
             {children}
         </div>
+
+        {/* FOOTER BAR */}
+        <FooterCommon />
       </body>
     </html>
   );

@@ -174,7 +174,7 @@ export default function Home() {
           </div>
         </div>
 
-        <FooterCommon />
+        
   </div>
   </div>
   )
