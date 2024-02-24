@@ -43,3 +43,8 @@ export interface ButtonPagination {
     page: number;
     isActive: boolean;
 }
+
+export type Option = {
+    value: string,
+    label: string
+}

@@ -33,18 +33,3 @@ export async function ApiGetLatestParty(page: number,size: number, hostId: numbe
     }
     return null;
 }
-
-export async function ApiLoginUser(Email: string, Password: string){
-    var data = new URLSearchParams();
-    data.append("Email", Email);
-    data.append("Password", Password);
-    const response = await fetch(Constant.API_LOGIN, {
-        method: "POST",
-        body: data,
-    });
-    if(response.ok){
-        const result = await response.json();
-        return result as JsonBody;
-    }
-    return null;
-}

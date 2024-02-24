@@ -8,7 +8,7 @@ export const URL_BASE_API = "http://localhost:5200";
 /*
  ** TABLE DATA
 */
-export const TABLE_DATA_SIZE = 3;
+export const TABLE_DATA_SIZE = 5;
 export const NUMBER_BUTTON_PAGINATION = 5;
 
 /*
@@ -37,6 +37,12 @@ export const API_LOGIN = URL_BASE_API + "/User/login";
 */
 export const API_CREATE_PARTY = URL_BASE_API + "/Party";
 export const API_GET_LATEST_PARTY = URL_BASE_API + "/Party/";
+
+/*
+ ** ROOM API
+*/
+export const API_CREATE_ROOM = URL_BASE_API + "/Room";
+
 /*
  ** PARTY TYPE
 */

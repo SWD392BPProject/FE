@@ -76,7 +76,7 @@ export default function MenuBarHeader(){
                 <div className="col-12 col-sm-12 col-md-9 d-flex row">
                     <nav className="navbar navbar-expand-sm">
                         <div className="container-fluid m-0 p-0">
-                        <a className="navbar-brand" href="#">Trang chủ</a>
+                        <Link className="navbar-brand" href="/">Trang chủ</Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                             <span className="navbar-toggler-icon"></span>
                         </button>
@@ -93,7 +93,10 @@ export default function MenuBarHeader(){
                                         ) || isHostRoute && (
                                             <>
                                                <li className="nav-item">
-                                                    <a className="nav-link" href="#">Party</a>
+                                                    <Link className="nav-link" href="/host/party">Party</Link>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href="/host/room">Room</Link>
                                                 </li> 
                                             </>
                                         ) ||(

@@ -84,7 +84,7 @@ export default function Page (){
                                     </div>
                                     <div className="form-group mt-2">
                                         <label className="fw-bold" htmlFor="Type">Type: </label>
-                                        <Field as="select" className="form-select" name="position">
+                                        <Field as="select" className="form-select" name="Type">
                                             {PARTY_TYPE_LIST.map((row, index)=>(
                                                 <option key={index} value={row.value}>{row.label}</option>
                                             ))}
