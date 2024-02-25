@@ -1,193 +1,182 @@
+'use client';
 import Image from "next/image";
 import styles from "./page.module.css";
 import FooterCommon from "@/component/FooterCommon";
+import { ApiGetLatestParty, ApiGetTopMonthParty } from "@/service/PartyService";
+import { PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE } from "@/common/Constant";
+import React from "react";
+import { Party } from "@/types";
+import { GetLabelOfPartyType } from "@/util/TextUtil";
 
 export default function Home() {
+  const [carouselParties, setCarouselParties] = React.useState<Party[] | null>(null);
+  const [topMonthPaties, setTopMonthPaties] = React.useState<Party[] | null>(null);
+
+  React.useEffect(()=>{
+    fetchLatestParty(1);
+    fetchTopMonthParty(1);
+  },[]);
+
+  async function fetchLatestParty(page: number){
+    const result = await ApiGetLatestParty(page, 4);
+    if(result && result.code == STATUS_CODE_OK){
+        setCarouselParties(result.data);
+    }
+  }
+
+  async function fetchTopMonthParty(page: number){
+    const result = await ApiGetTopMonthParty(page, 8);
+    if(result && result.code == STATUS_CODE_OK){
+      setTopMonthPaties(result.data);
+    }
+  }
+
+
   return (<div>
     {/* // <!-- SẢN PHẨM BÁN CHẠY --> */}
     <div className="row d-flex justify-content-center bg-graylight">
       <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-          <span className="fs-24 my-3">Sản Phẩm Bán Chạy - HOT COMBO</span>
-          <div className="row bg-white border-r-gray-1 mt-3 m-0">
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_01.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_02.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_03.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_04.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_01.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_02.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_03.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
-            <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-              <Image alt={""} width={400} height={400} src="/img/thuoc_04.png" className="image-fit" style={{width: '100%', height: 200}} />
-              <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-              <br/>
-              <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-              <br/>
-              <span className="text-success">In Stock, 251 sản phẩm</span>
-            </div>
+          
+        <div className='row bg-lightgray'>
+          {/* LEFT CAROUSEL */}
+          <div className='col-12 col-sm-12 col-md-12 col-lg-8'>
+            {/* <!-- Carousel --> */}
+            <div id="demo" className="carousel slide" data-bs-ride="carousel" style={{marginTop:-25}}>
+                {/* <!-- Indicators/dots --> */}
+                <div className="carousel-indicators">
+                  <button type="button" data-bs-target="#demo" data-bs-slide-to="0" className="btn-circle-light active"></button>
+                  <button type="button" data-bs-target="#demo" data-bs-slide-to="1" className="btn-circle-light"></button>
+                  <button type="button" data-bs-target="#demo" data-bs-slide-to="2" className="btn-circle-light"></button>
+                  <button type="button" data-bs-target="#demo" data-bs-slide-to="3" className="btn-circle-light"></button>
+                </div>
+          
+                {/* <!-- The slideshow/carousel --> */}
+                <div className="d-flex align-items-center mb-3 ps-3">
+                  <div className="carousel-inner py-5 m-0">
+                      {carouselParties && carouselParties.length > 3 && (
+                        <>
+                          <div className="carousel-item active position-relative">
+                            <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[0].image} alt={carouselParties[0].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
+                            <div className="position-absolute carousel-title w-100">
+                                <h3 className="text-white">{carouselParties[0].partyName}</h3>
+                                <h5 className="text-white">{carouselParties[0].address} - {GetLabelOfPartyType(carouselParties[0].type)}</h5>
+                            </div>
+                          </div>
+                          <div className="carousel-item position-relative">
+                            <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[1].image} alt={carouselParties[1].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
+                            <div className="position-absolute carousel-title w-100">
+                                <h3 className="text-white">{carouselParties[1].partyName}</h3>
+                                <h5 className="text-white">{carouselParties[1].address} - {GetLabelOfPartyType(carouselParties[1].type)}</h5>
+                            </div>
+                          </div>
+                          <div className="carousel-item position-relative">
+                            <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[2].image} alt={carouselParties[2].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
+                            <div className="position-absolute carousel-title w-100">
+                                <h3 className="text-white">{carouselParties[2].partyName}</h3>
+                                <h5 className="text-white">{carouselParties[2].address} - {GetLabelOfPartyType(carouselParties[2].type)}</h5>
+                            </div>
+                          </div>
+                          <div className="carousel-item position-relative">
+                            <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[3].image} alt={carouselParties[3].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
+                            <div className="position-absolute carousel-title w-100">
+                                <h3 className="text-white">{carouselParties[3].partyName}</h3>
+                                <h5 className="text-white">{carouselParties[3].address} - {GetLabelOfPartyType(carouselParties[3].type)}</h5>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                  </div>
+                </div>
+              </div>
           </div>
-      </div>
 
-      {/* <!-- SẢN PHẨM THẢO DƯỢC --> */}
-      <div className="row d-flex justify-content-center bg-graylight">
-        <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-            <span className="fs-24 my-3">Sản Phẩm Thảo Dược</span>
-            <div className="row bg-white border-r-gray-1 mt-3 m-0">
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_01.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_02.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_03.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_04.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_01.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_02.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_03.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                <Image alt={""} width={400} height={400} src="/img/thuoc_04.png" className="image-fit" style={{width: '100%', height: 200}} />
-                <span className="text-danger fw-bold fs-24 my-2">780.000 VND</span>
-                <br/>
-                <span className="hover-text-red cursor-pointer">Turmilive Plus Curcumin + Piperine - Kẹo Ngậm NGHỆ HỒ TIÊU CAY MẬT ONG (24 viên) | Giảm viêm họng, ho khan. Tinh nghệ hàm lượng 100mg chống oxy hóa, chống viêm nhiễm đường hô hấp ở phổi.</span>
-                <br/>
-                <span className="text-success">In Stock, 251 sản phẩm</span>
-              </div>
-            </div>
+          {/* RIGHT PRODUCTS */}
+          <div className="col-12 col-sm-12 col-md-4">
+            <h1 className="mt-3 fw-bold text-primary"><span className="text-dark">KID</span> BOOKING</h1>
+            <p style={{textAlign: 'justify'}}>
+              Thỏa sức đặt tiệc sinh nhật theo chủ đề, mời bạn bè đến vui chơi & thưởng thức những món ăn ngon, chỉ có tại <span className="fw-bold text-primary">KID BOOKING</span>
+            </p>
+            <p className="fw-bold">
+                Liên hệ ngay: 
+            </p>
+            <span>Email: kidbooking-support@kidbk.com</span>
+            <button className="btn btn-primary mt-3">BOOKING NOW</button>
+           
+          </div>
+
+
         </div>
         </div>
 
         {/* <!-- CHÍNH SÁCH --> */}
-        <div className="row d-flex justify-content-center bg-graylight">
+        <div className="row d-flex justify-content-center bg-white">
           <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-              <span className="fs-24 my-3">Chính sách mua hàng</span>
-              <div className="row border-r-gray-1 mt-3 m-0">
-                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                  <h5>Miễn phí Giao hàng Toàn Quốc</h5>
-                  <span>Thanh Toán Khi Nhận Hàng</span>
+              <div className="d-flex justify-content-center">
+                <Image alt={""} src="/img/LOGO.png" width={150} height={120}/>
+              </div>
+              <div className="d-flex justify-content-center">
+                <span className="fs-24 my-3 text-center"><span className="fw-bold text-primary">KID BOOKING</span> CÓ GÌ HẤP DẪN</span>
+              </div>
+              <div className="text-center">
+                <span>Là chuỗi trung tâm đặt tiệc lớn nhất cả nước với hệ thống booking hiện đại,</span><br/>
+                <span>dịch vụ tận tình mang lại trải nghiệm sang trọng cho người dùng.</span>
+              </div>
+              <div className="row border-r-gray-1 mt-3 m-0 text-center fw-bold">
+                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3">
+                  <Image alt={""} src="/img/KHUYEN-MAI.png" width={500} height={500} className="card-policy-image"/>
+                  <br/>
+                  <span>Chương trình khuyến mãi lớn</span>
                 </div>
-                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                  <h5>Đổi Trả Hàng Trong 3 Tuần</h5>
-                  <span>Áp Dụng Cho Sản Phẩm Có Hóa Đơn Và Nguyên Seal</span>
+                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3">
+                  <Image alt={""} src="/img/CHANGE.jpg" width={500} height={500} className="card-policy-image"/>
+                  <br/>
+                  <span>Thay đổi, hủy bỏ dịch vụ trong vòng 3 tuần</span>
                 </div>
-                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                  <h5>Phản Hồi Trong Vòng 24H</h5>
-                  <span>Tư Vấn 24h/7</span>
+                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3">
+                  <Image alt={""} src="/img/24H.jpg" width={500} height={500} className="card-policy-image"/>
+                  <br/>
+                  <span>Phản Hồi Trong Vòng 24H</span>
                 </div>
-                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3 border-tbl-gray-1">
-                  <h5>Bảo Mật Thông Tin Cá Nhân</h5>
-                  <span>Bảo Vệ Khách Hàng</span>
+                <div className="col-6 col-sm-6 col-md-3 cursor-pointer p-3">
+                  <Image alt={""} src="/img/SECURITY.jpg" width={500} height={500} className="card-policy-image"/>
+                  <br/>
+                  <span>Bảo Mật Thông Tin Cá Nhân</span>
                 </div>
               </div>
           </div>
         </div>
 
+
+        {/* <!-- PARTY MỚI NHẤT --> */}
+        <div className="row d-flex justify-content-center bg-graylight">
+          <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
+              <span className="fs-24 my-3">TOP VIEWED IN MONTH</span>
+              <div className="row bg-white border-r-gray-1 mt-3 m-0 py-2" style={{borderRadius:10}}>
+                  {topMonthPaties && topMonthPaties.map((row, index)=>(
+                    <div key={index} className="col-6 col-sm-6 col-md-3">
+                        <Image alt={""} src={PUBLIC_IMAGE_UPLOAD + row.image} width={500} height={500} style={{width:'100%',height:200,borderRadius:15}}/>
+                        <span>{row.partyName}</span>
+                    </div>
+                  ))}
+              </div>
+          </div>
+        </div>
+
+
         {/* <!-- CỬA HÀNG CỦA CHÚNG TÔI --> */}
         <div className="row d-flex justify-content-center bg-graylight">
           <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-              <span className="fs-24 my-3">Cửa hàng của chúng tôi</span>
-              <div className="row bg-white border-r-gray-1 mt-3 m-0">
-                <div className="col-12 col-sm-12 col-md-6 p-5">
-                  <h4>Gstore Đồng Nai</h4>
-                  <p>Địa chỉ: 453 Ấp 3, xã Thừa Đức, huyện Cẩm Mỹ, tỉnh Đồng Nai</p>
-                  <p>Thứ 2 - Thứ 7: 8Am - 10PM</p>
-                  <p>Chủ nhật: Liên hệ để đặt hàng</p>
-                  <p>SĐT + Zalo: 0968900475 - (028) 02 02 776</p>
+              <span className="fs-24 my-3">MY STORE</span>
+              <div className="row bg-white border-r-gray-1 mt-3 m-0" style={{borderRadius:10}}>
+                <div className="col-12 col-sm-12 col-md-6 p-3">
+                  <h4><span className="text-primary fw-bold">KID BOOKING</span> TP.HCM</h4>
+                  <p className="mt-4"><b>Địa chỉ:</b> 44/1 Lê Lai, Quận 7, Tp.HCM</p>
+                  <p><b>Thứ 2 - Thứ 7:</b> 8Am - 10PM</p>
+                  <p><b>Chủ nhật:</b> Liên hệ để đặt hàng</p>
+                  <p><b>SĐT + Zalo:</b> 0968900475 - (028) 02 02 776</p>
                 </div>
-                <div className="col-12 col-sm-12 col-md-6">
-                  <Image alt={""} width={400} height={400} src="/img/MY_STORE.png" style={{width: '100%', height: 400}} />
+                <div className="col-12 col-sm-12 col-md-6 p-3">
+                  <Image alt={""} width={400} height={400} src="/img/Workshop_1.jpg" style={{width: '100%', height: 300, borderRadius:15}} />
                 </div>
               </div>
           </div>

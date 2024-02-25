@@ -25,11 +25,25 @@ export async function ApiCreateParty(HostUserId: number,PartyName: string, Addre
     return null
 }
     
-export async function ApiGetLatestParty(page: number,size: number, hostId: number){
-    const response = await fetch(Constant.API_GET_LATEST_PARTY + page + "/" + size + "/" + hostId);
+export async function ApiGetLatestParty(page: number,size: number, hostId?: number){
+    var plusString = ""
+    if(hostId){
+        plusString = "/" + hostId;
+    }
+    const response = await fetch(Constant.API_GET_LATEST_PARTY + page + "/" + size + plusString);
     if(response.ok){
         const result = await response.json();
         return result as JsonBody;
     }
     return null;
 }
+
+export async function ApiGetTopMonthParty(page: number,size: number){
+    const response = await fetch(Constant.API_GET_TOP_MONTH_PARTY + page + "/" + size);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+

@@ -26,6 +26,28 @@ export interface Party {
     hostUserId: number,
 }
 
+export interface Room {
+    roomID: number,
+    roomName: string,
+    minPeople: number,
+    maxPeople: number,
+    price: number,
+    type: string,
+    description: string,
+    image: string,
+    hostUserId: number,
+}
+
+export interface Package {
+    packageID: number,
+    packageName: string,
+    price: number,
+    activeDays: number,
+    description: string,
+    status: string,
+    image: string,
+    adminUserId: number,
+}
 
 export interface UserInfoCookie{
     userID: number;

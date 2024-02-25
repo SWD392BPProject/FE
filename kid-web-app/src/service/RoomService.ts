@@ -28,4 +28,14 @@ export async function ApiCreateRoom(HostUserID: number,RoomName: string, MinPeop
     }
     return null
 }
+
+export async function ApiGetLatestRoom(page: number,size: number, hostId: number){
+    const response = await fetch(Constant.API_GET_LATEST_ROOM + page + "/" + size + "/" + hostId);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
     
