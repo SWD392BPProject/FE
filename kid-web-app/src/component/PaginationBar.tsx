@@ -49,7 +49,7 @@ export default function PaginationBar( { totalPage, currentPage, handleChangePag
     return(
         <div className="d-flex justify-content-center mb-5">
             {arrayButtonPagination && arrayButtonPagination.length > 1 &&  arrayButtonPagination.map((item, index)=>(
-                <Button key={index} className="mx-1 p-0" variant={item.isActive && `contained` || `outlined`} color="error" style={{width:40, minWidth:40, height:40}} onClick={()=>handleChangePage(item.page)} >{item.page}</Button>
+                <Button key={index} className="mx-1 p-0" variant={item.isActive && `contained` || `outlined`} color="primary" style={{width:40, minWidth:40, height:40}} onClick={()=>handleChangePage(item.page)} >{item.page}</Button>
             ))}
         </div> 
     );

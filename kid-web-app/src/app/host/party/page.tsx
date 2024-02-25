@@ -39,8 +39,8 @@ export default function Page (){
     return(
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-                <h1 className="fw-bold text-danger">PARTY <span className="text-dark">MANAGEMENT</span></h1>
-                <Link href="/host/party/create"><button className="btn btn-danger">+ ADD PARTY</button></Link>
+                <h1 className="fw-bold text-primary">PARTY <span className="text-dark">MANAGEMENT</span></h1>
+                <Link href="/host/party/create"><button className="btn btn-primary">+ ADD PARTY</button></Link>
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">

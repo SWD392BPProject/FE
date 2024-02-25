@@ -53,7 +53,7 @@ export default function Page (){
     return(
         <div className="d-flex justify-content-center row mt-5">
         <div className="mt-5 col-12 col-sm-12 col-md-6">
-            <h1 className="fw-bold mb-3 text-danger">CREATE AN <span className="text-dark">ACCOUNT</span></h1>
+            <h1 className="fw-bold mb-3 text-primary">CREATE AN <span className="text-dark">ACCOUNT</span></h1>
             <Formik 
             initialValues={{
                 Role: 'User',
@@ -141,11 +141,11 @@ export default function Page (){
                             </div>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-danger mt-3 w-100">REGISTER NOW</button>
+                    <button type="submit" className="btn btn-primary mt-3 w-100">REGISTER NOW</button>
                 </Form>
             )}
             </Formik>
-            <div className="mt-3 d-flex justify-content-center">
+            <div className="mt-3 d-flex justify-content-center mb-4">
                 <Link href="/login" className="text-decoration-underline text-primary">Have an account, login now?</Link>
             </div>
 

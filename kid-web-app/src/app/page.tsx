@@ -3,15 +3,17 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import FooterCommon from "@/component/FooterCommon";
 import { ApiGetLatestParty, ApiGetTopMonthParty } from "@/service/PartyService";
-import { PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE } from "@/common/Constant";
+import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE } from "@/common/Constant";
 import React from "react";
 import { Party } from "@/types";
 import { GetLabelOfPartyType } from "@/util/TextUtil";
+import { Field, Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [carouselParties, setCarouselParties] = React.useState<Party[] | null>(null);
   const [topMonthPaties, setTopMonthPaties] = React.useState<Party[] | null>(null);
-
+  const router = useRouter();
   React.useEffect(()=>{
     fetchLatestParty(1);
     fetchTopMonthParty(1);
@@ -32,16 +34,60 @@ export default function Home() {
   }
 
 
+  function handleSubmitSearch(values: { PartyName: string; Address: string; Type: string; Description: string; }): any {
+    router.push("/search");
+  }
+
   return (<div>
     {/* // <!-- SẢN PHẨM BÁN CHẠY --> */}
     <div className="row d-flex justify-content-center bg-graylight">
-      <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-          
-        <div className='row bg-lightgray'>
+
+      <div className="col-12 col-sm-12 col-md-9 my-2">
+        {/* BOOKING SEARCH */}
+        <Formik 
+          initialValues={{
+              PartyName: 'Tiệc sinh nhật LUXURY',
+              Address: 'Hồ Chí Minh',
+              Type: PARTY_TYPE_LIST[0].value,
+              Description: "Một sinh nhật thật ý nghĩa và đặc biệt để đánh dấu cột mốc quan trọng của các thiên thần nhỏ luôn là điều bố mẹ băn khoăn? Với sự đa dạng trong các gói tiệc sinh nhật, tiNi hứa hẹn sẽ mang đến cho các thiên thần nhỏ một bữa tiệc đầy bất ngờ và tràn ngập những khoảnh khắc đáng nhớ.",
+          }}
+          onSubmit={values=>handleSubmitSearch(values)}>
+              {({ errors, setFieldValue, touched }) => (
+        <Form>
+          <div className="row">
+            <div className="row">
+              <div className="col-12 col-sm-12 col-md-10 row">
+                <div className="col-12 col-sm-12 col-md-6 form-group p-0 pt-2">
+                    <Field as="select" className="form-select py-3" name="Type">
+                        {PARTY_TYPE_LIST.map((row, index)=>(
+                            <option key={index} value={row.value}>{row.label}</option>
+                        ))}
+                    </Field>
+                </div>
+                <div className="col-12 col-sm-12 col-md-6 form-group p-0 pt-2">
+                  <Field type="number" className="form-control py-3" placeholder="Số người" />
+                </div>
+                <div className="col-12 col-sm-12 col-md-12 form-group p-0 pt-2">
+                    <Field type="date" className="form-control py-3" placeholder="Ngày book" />
+                </div>
+              </div>
+              <div className="col-12 col-sm-12 col-md-2 row pt-2">
+                <button className="btn btn-primary w-100 h-100 ms-0 ms-sm-0 ms-md-2">BOOKING</button>
+              </div>
+            </div>
+          </div>
+        </Form>
+        )}
+      </Formik>
+      </div>
+
+      <div className="col-12 col-sm-12 col-md-9 my-2 bg-white">
+        <div className='row'>
           {/* LEFT CAROUSEL */}
           <div className='col-12 col-sm-12 col-md-12 col-lg-8'>
+
             {/* <!-- Carousel --> */}
-            <div id="demo" className="carousel slide" data-bs-ride="carousel" style={{marginTop:-25}}>
+            <div id="demo" className="carousel slide" data-bs-ride="carousel" >
                 {/* <!-- Indicators/dots --> */}
                 <div className="carousel-indicators">
                   <button type="button" data-bs-target="#demo" data-bs-slide-to="0" className="btn-circle-light active"></button>
@@ -92,6 +138,7 @@ export default function Home() {
 
           {/* RIGHT PRODUCTS */}
           <div className="col-12 col-sm-12 col-md-4">
+            <div style={{marginTop:40}}></div>
             <h1 className="mt-3 fw-bold text-primary"><span className="text-dark">KID</span> BOOKING</h1>
             <p style={{textAlign: 'justify'}}>
               Thỏa sức đặt tiệc sinh nhật theo chủ đề, mời bạn bè đến vui chơi & thưởng thức những món ăn ngon, chỉ có tại <span className="fw-bold text-primary">KID BOOKING</span>

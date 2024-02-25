@@ -1,13 +1,39 @@
 import * as Constant from "@/common/Constant";
 import { JsonBody } from "@/types";
 
-export async function ApiCreateRoom(HostUserID: number,RoomName: string, MinPeople: number, MaxPeople: number, Price: number, Type: string[], Description: string, Image: File | null, token: string){
+export async function ApiCreateRoom(
+        HostUserID: number,
+        RoomName: string, 
+        MinPeople: number, 
+        MaxPeople: number, 
+        Price: number, 
+        Type: string[], 
+        Description: string, 
+        SlotStart1: string, 
+        SlotStart2: string, 
+        SlotStart3: string, 
+        SlotStart4: string, 
+        SlotEnd1: string, 
+        SlotEnd2: string, 
+        SlotEnd3: string, 
+        SlotEnd4: string, 
+        Image: File | null, 
+        token: string
+    ){
     var data = new FormData();    
     data.append("HostUserID", HostUserID.toString());
     data.append("RoomName", RoomName);
     data.append("MinPeople", MinPeople.toString());
     data.append("MaxPeople", MaxPeople.toString());
     data.append("Price", Price.toString());
+    data.append("SlotStart1", SlotStart1);
+    data.append("SlotStart2", SlotStart2);
+    data.append("SlotStart3", SlotStart3);
+    data.append("SlotStart4", SlotStart4);
+    data.append("SlotEnd1", SlotEnd1);
+    data.append("SlotEnd2", SlotEnd2);
+    data.append("SlotEnd3", SlotEnd3);
+    data.append("SlotEnd4", SlotEnd4);
     Type.forEach((typeValue, index) => {
         data.append(`Type[${index}]`, typeValue);
     });

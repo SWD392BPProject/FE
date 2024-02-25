@@ -47,3 +47,30 @@ export async function ApiGetTopMonthParty(page: number,size: number){
     return null;
 }
 
+export async function ApiGetPartyById(id: number){
+    const response = await fetch(Constant.API_GET_PARTY_BY_ID + id);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+export async function ApiGetPartiesSearch(Type: string, DateBooking: string, SlotTime :string, People: number, page: number, size: number){
+    const data = new URLSearchParams();
+    data.append("Type", Type);
+    data.append("DateBooking", DateBooking);
+    data.append("SlotTime", SlotTime);
+    data.append("People", People.toString());
+    const response = await fetch(Constant.API_GET_SEARCH_PARTY + page + "/" + size,{
+        method: "POST",
+        body: data
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+

@@ -18,12 +18,14 @@ export interface User {
 
 export interface Party {
     partyID: number,
+    monthViewed: number,
     partyName: string,
     address: string,
     type: string,
     description: string,
+    createDate: string,
     image: string,
-    hostUserId: number,
+    hostUserID: number,
 }
 
 export interface Room {

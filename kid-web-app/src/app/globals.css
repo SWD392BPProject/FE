@@ -183,16 +183,26 @@ a {
 .border-r-gray-1 {
   border-right: #eeeeee solid 1px;
 }
-
+.border-radius-gray {
+  border: lightgray solid 1px;
+  border-radius: 10px;
+}
+.border-radius-gray img{
+  cursor: pointer;
+}
+.border-radius-gray h4:hover {
+  color: rgb(71, 74, 237);
+  cursor: pointer;
+}
 .border-radius-black {
   border: black solid 1px;
   border-radius: 10px;
   cursor: pointer;
 }
 .border-radius-black:hover {
-  background-color: lightcoral;
-  border-color: lightcoral;
-  border: lightcoral solid 3px;
+  background-color: rgb(144, 194, 255);
+  border-color: rgb(144, 194, 255);
+  border: rgb(144, 194, 255) solid 3px;
 }
 .btn-circle-red{
   background-color: rgb(36, 45, 208);

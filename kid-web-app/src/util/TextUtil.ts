@@ -1,4 +1,4 @@
-import { PACKAGE_TYPE_LIST, PARTY_TYPE_LIST } from "@/common/Constant";
+import { DESCRIPTION_SHORT_LENGTH, PACKAGE_TYPE_LIST, PARTY_TYPE_LIST, TITLE_SHORT_LENGTH } from "@/common/Constant";
 
 export const GetLabelOfPartyType = (value: string) => {
     for(let i = 0; i < PARTY_TYPE_LIST.length; i++){
@@ -17,6 +17,26 @@ export const GetLabelOfPackageType = (value: number) => {
     }
     return '';
 }
+
+export const GetDescriptionTextShort = (value: string) => {
+    if(value.length > DESCRIPTION_SHORT_LENGTH){
+        return value.slice(0, DESCRIPTION_SHORT_LENGTH) + "...";
+    }
+    return value;
+}
+
+export const GetDateFormat = (value: string) => {
+    return value.slice(0,10);
+}
+
+export const GetTitleTextShort = (value: string) => {
+    if(value.length > TITLE_SHORT_LENGTH){
+        return value.slice(0, TITLE_SHORT_LENGTH) + "...";
+    }
+    return value;
+}
+
+
 
 export const FormatVND = (value: string) => {
      // Xóa bỏ tất cả các ký tự không phải số từ chuỗi

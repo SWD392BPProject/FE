@@ -48,7 +48,23 @@ export default function Page (){
     const handleSubmitRoom = async (values : PartyFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            var result = await ApiCreateRoom(userInfoCookie.userID,values.RoomName, values.MinPeople, values.MaxPeople, values.Price, listType??[], values.Description, thumbnailImage, userInfoCookie.token);
+            var result = await ApiCreateRoom(
+                userInfoCookie.userID,
+                values.RoomName, 
+                values.MinPeople, 
+                values.MaxPeople, 
+                values.Price, listType??[], 
+                values.Description, 
+                values.SlotStart1,
+                values.SlotStart2,
+                values.SlotStart3,
+                values.SlotStart4,
+                values.SlotEnd1,
+                values.SlotEnd2,
+                values.SlotEnd3,
+                values.SlotEnd4,
+                thumbnailImage, userInfoCookie.token
+            );
             if(result?.code==STATUS_CODE_OK){
                 alert("Create room successfully!");
             }else if(result?.code==STATUS_CODE_ERROR){
@@ -96,12 +112,20 @@ export default function Page (){
     return(
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-                <h1 className="fw-bold text-danger">ROOM <span className="text-dark">CREATE</span></h1>
+                <h1 className="fw-bold text-primary">ROOM <span className="text-dark">CREATE</span></h1>
                 <Formik 
                     initialValues={{
                         RoomName: 'Phòng Sofa 1A',
                         MinPeople: 1,
                         MaxPeople: 10,
+                        SlotStart1:"08:00",
+                        SlotStart2:"13:00",
+                        SlotStart3:"17:00",
+                        SlotStart4:"",
+                        SlotEnd1:"11:00",
+                        SlotEnd2:"16:00",
+                        SlotEnd3:"20:00",
+                        SlotEnd4:"",
                         Price: 1000000,
                         Type: (optionTypeSelected && optionTypeSelected.length > 0) && optionTypeSelected[0].value || PARTY_TYPE_LIST[0].value,
                         Description: "Phòng hội trường 50-100 chỗ. Đối với không gian tổ chức nhỏ chỉ từ 50-100 chỗ, đây sẽ không gian phù hợp với các buổi tổ chức nhỏ như họp mặt, CLB, đào tạo,… với sơ đồ thường thấy nhất là lớp học hoặc nhóm nhỏ."
@@ -170,6 +194,60 @@ export default function Page (){
                                         )}
                                     </div>
                                     <div className="form-group mt-2">
+                                        <label className="fw-bold">Slot List: </label>
+                                        <div className="row d-flex align-items-center">
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotStart1" className="form-control" required/>
+                                            </div>
+                                            to
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotEnd1" className="form-control" required/>
+                                            </div>
+                                        </div>
+                                        {errors.SlotStart1 && touched.SlotStart1 ? (
+                                            <div className="fw-bold text-danger">{errors.SlotStart1}</div>
+                                        ) : null}
+                                        {errors.SlotEnd1 && touched.SlotEnd1 ? (
+                                            <div className="fw-bold text-danger">{errors.SlotEnd1}</div>
+                                        ) : null}
+                                        <div className="row d-flex align-items-center mt-2">
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotStart2" className="form-control"/>
+                                            </div>
+                                            to
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotEnd2" className="form-control"/>
+                                            </div>
+                                        </div>
+                                        {errors.SlotEnd2 && touched.SlotEnd2 ? (
+                                            <div className="fw-bold text-danger">{errors.SlotEnd2}</div>
+                                        ) : null}
+                                        <div className="row d-flex align-items-center mt-2">
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotStart3" className="form-control"/>
+                                            </div>
+                                            to
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotEnd3" className="form-control"/>
+                                            </div>
+                                        </div>
+                                        {errors.SlotEnd3 && touched.SlotEnd3 ? (
+                                            <div className="fw-bold text-danger">{errors.SlotEnd3}</div>
+                                        ) : null}
+                                        <div className="row d-flex align-items-center mt-2">
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotStart4" className="form-control"/>
+                                            </div>
+                                            to
+                                            <div className="col-5 col-sm-5 col-md-4">
+                                                <Field type="time" name="SlotEnd4" className="form-control"/>
+                                            </div>
+                                        </div>
+                                        {errors.SlotEnd4 && touched.SlotEnd4 ? (
+                                            <div className="fw-bold text-danger">{errors.SlotEnd4}</div>
+                                        ) : null}
+                                    </div>
+                                    <div className="form-group mt-2">
                                         <label className="fw-bold" htmlFor="Description">Description: </label>
                                         <Field as="textarea" name="Description" className="form-control" rows={8}></Field>
                                         {errors.Description && touched.Description ? (
@@ -197,7 +275,7 @@ export default function Page (){
                             </div>
                             
                             <div className="mt-4">
-                                <Button type="submit" variant="contained" startIcon={<AddIcon />} color="error">
+                                <Button type="submit" variant="contained" startIcon={<AddIcon />} color="primary">
                                     Register
                                 </Button>
                                 <Link href="/host/room" className="ms-2">
@@ -218,21 +296,56 @@ export default function Page (){
 
 const PartyValidateSchema = Yup.object().shape({
     RoomName: Yup.string()
-      .min(3,'PartyName name must be at least 3 characters')  
-      .max(255, 'PartyName maximum 255 characters')
-      .required('Please enter PartyName.'),
-      MinPeople: Yup.number()
-      .min(1,'MinPeople must be at least 1')  
-      .max(10000, 'MinPeople maximum 10000')
-      .required('Please enter MinPeople.'),
-      MaxPeople: Yup.number()
-      .min(1,'MaxPeople must be at least 1')  
-      .max(10000, 'MaxPeople maximum 10000')
-      .required('Please enter MaxPeople.'),
-      Price: Yup.number()
-      .min(100000,'Price must be at least 100000')  
-      .max(1000000000, 'Price maximum 1000000000')
-      .required('Please enter Price.'),
+        .min(3,'PartyName name must be at least 3 characters')  
+        .max(255, 'PartyName maximum 255 characters')
+        .required('Please enter PartyName.'),
+    MinPeople: Yup.number()
+        .min(1,'MinPeople must be at least 1')  
+        .max(10000, 'MinPeople maximum 10000')
+        .required('Please enter MinPeople.'),
+    MaxPeople: Yup.number()
+        .min(1,'MaxPeople must be at least 1')  
+        .max(10000, 'MaxPeople maximum 10000')
+        .required('Please enter MaxPeople.'),
+    Price: Yup.number()
+        .min(100000,'Price must be at least 100000')  
+        .max(1000000000, 'Price maximum 1000000000')
+        .required('Please enter Price.'),
+    SlotStart1: Yup.string()
+        .required('Please enter SlotStart1'),
+    SlotEnd1: Yup.string()
+        .required('Please enter SlotEnd1')
+        .test('is-greater', 'SlotEnd must be greater than SlotStart', function(value, context) {
+            const { SlotStart1 } = context.parent;
+            if (!SlotStart1 || !value) {
+                return true; // Không kiểm tra nếu một trong hai trống
+            }
+            return value > SlotStart1; // Kiểm tra nếu SlotEnd1 lớn hơn SlotStart1
+        }),
+    SlotEnd2: Yup.string()
+        .test('is-greater', 'SlotEnd must be greater than SlotStart', function(value, context) {
+            const { SlotStart2 } = context.parent;
+            if (!SlotStart2 || !value) {
+                return true; // Không kiểm tra nếu một trong hai trống
+            }
+            return value > SlotStart2; // Kiểm tra nếu SlotEnd1 lớn hơn SlotStart1
+        }),
+    SlotEnd3: Yup.string()
+        .test('is-greater', 'SlotEnd must be greater than SlotStart', function(value, context) {
+            const { SlotStart3 } = context.parent;
+            if (!SlotStart3 || !value) {
+                return true; // Không kiểm tra nếu một trong hai trống
+            }
+            return value > SlotStart3; // Kiểm tra nếu SlotEnd1 lớn hơn SlotStart1
+        }),
+    SlotEnd4: Yup.string()
+        .test('is-greater', 'SlotEnd must be greater than SlotStart', function(value, context) {
+            const { SlotStart4 } = context.parent;
+            if (!SlotStart4 || !value) {
+                return true; // Không kiểm tra nếu một trong hai trống
+            }
+            return value > SlotStart4; // Kiểm tra nếu SlotEnd1 lớn hơn SlotStart1
+        }),
 });
 
 interface PartyFormValues {
@@ -240,6 +353,14 @@ interface PartyFormValues {
     MinPeople: number;
     MaxPeople: number;
     Price: number;
+    SlotStart1: string;
+    SlotStart2: string;
+    SlotStart3: string;
+    SlotStart4: string;
+    SlotEnd1: string;
+    SlotEnd2: string;
+    SlotEnd3: string;
+    SlotEnd4: string;
     Type: string;
     Description: string;
 }
