@@ -9,6 +9,10 @@ export const GetLabelOfPartyType = (value: string) => {
     return '';
 }
 
+export const RemoveDuplicateString = (array: string[]) => {
+    return Array.from(new Set(array));
+}
+
 export const GetLabelOfPackageType = (value: number) => {
     for(let i = 0; i < PACKAGE_TYPE_LIST.length; i++){
         if(PACKAGE_TYPE_LIST[i].value == value){
@@ -16,6 +20,13 @@ export const GetLabelOfPackageType = (value: number) => {
         }
     }
     return '';
+}
+
+export const TimeToString = (value: string) => {
+    if(value.length>5){
+        return value.slice(0,5);
+    }
+    return value;
 }
 
 export const GetDescriptionTextShort = (value: string) => {
@@ -35,8 +46,6 @@ export const GetTitleTextShort = (value: string) => {
     }
     return value;
 }
-
-
 
 export const FormatVND = (value: string) => {
      // Xóa bỏ tất cả các ký tự không phải số từ chuỗi

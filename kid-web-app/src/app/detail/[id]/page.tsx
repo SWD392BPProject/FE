@@ -1,18 +1,36 @@
 'use client';
 import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE, USER_COOKIE } from "@/common/Constant";
 import { ApiGetPartyById } from "@/service/PartyService";
-import { Party, Room, UserInfoCookie } from "@/types";
+import { Party, Room, Slot, UserInfoCookie } from "@/types";
 import React from "react";
 import Image from "next/image";
 import PlaceIcon from '@mui/icons-material/Place';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikValues } from "formik";
 import PaginationBar from "@/component/PaginationBar";
 import { useCookies } from "react-cookie";
 import { ApiGetLatestRoom } from "@/service/RoomService";
-import { FormatVND, GetLabelOfPartyType } from "@/util/TextUtil";
+import { FormatVND, GetLabelOfPartyType, TimeToString } from "@/util/TextUtil";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { ApiGetSlotByRoomID } from "@/service/SlotService";
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 type Params = {
     params: {
         id: number;
@@ -24,6 +42,12 @@ export default function Page({ params } : Params){
     const [rooms, setRooms] = React.useState<Room[] | null>(null);
     const [totalPage, setTotalPage] = React.useState(0);
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [roomView, setRoomView] = React.useState<Room | null>(null);
+    const [roomViewSlot, setRoomViewSlot] = React.useState<Slot[] | null>(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     React.useEffect(()=>{
         fetchGetPartyById(params.id);
@@ -37,6 +61,24 @@ export default function Page({ params } : Params){
         }
     }
 
+    async function fetchGetSlotByRoomID(id: number){
+        const result = await ApiGetSlotByRoomID(id);
+        if(result && result.code == STATUS_CODE_OK){
+            setRoomViewSlot(result.data);
+            return;
+        }
+        setRoomViewSlot(null);
+    }
+
+    // async function fetchAllMenuInPartyId(id: number){
+    //     const result = await ApiGetAllMenuInPartyId(id);
+    //     if(result && result.code == STATUS_CODE_OK){
+    //         setRoomViewSlot(result.data);
+    //         return;
+    //     }
+    //     setRoomViewSlot(null);
+    // }
+
     async function fetchAllRoomByHostId(page: number, hostId: number){
         const result = await ApiGetLatestRoom(page, TABLE_DATA_SIZE, hostId);
         if(result && result.code == STATUS_CODE_OK){
@@ -48,7 +90,6 @@ export default function Page({ params } : Params){
     }
 
     function handleSubmitSearch(values: { PartyName: string; Address: string; Type: string; Description: string; }): any {
-        throw new Error("Function not implemented.");
     }
 
     const handleChangePage = (num : number) => {
@@ -58,6 +99,22 @@ export default function Page({ params } : Params){
             fetchAllRoomByHostId(num, party.hostUserID);
         }
     }
+
+    const handleClickViewRoom = async (room: Room) => {
+        setRoomView(room);
+        await fetchGetSlotByRoomID(room.roomID);
+        setSelectedIndex(0);
+        handleOpen();
+    }
+
+    function handleSubmitNothing(values: FormikValues): void | Promise<any> {
+        
+    }
+
+    const handleRadioChange = (selectedIndex: number) => {
+        // Cập nhật trạng thái của ứng dụng hoặc lưu trữ giá trị của radio được chọn ở đây
+        setSelectedIndex(selectedIndex); // Ví dụ: setSelectedIndex là một hàm để cập nhật trạng thái của radio được chọn
+    };
 
     return (
         <div className="row d-flex justify-content-center bg-white">
@@ -100,7 +157,7 @@ export default function Page({ params } : Params){
                                 <ShareIcon className="text-primary" /> <b className="ms-2">SHARE</b>
                             </div>
                         </div>
-                        <Image alt={party?.partyName??''} src={PUBLIC_IMAGE_UPLOAD + party?.image} width={1000} height={1000} style={{width:'100%',height:500,borderRadius:15}}/>
+                        <Image alt={party?.partyName??''} src={PUBLIC_IMAGE_UPLOAD + party?.image} width={1000} height={1000} className="image-fit" style={{width:'100%',height:500,borderRadius:15}}/>
                     </div>
                 </div>
 
@@ -167,7 +224,7 @@ export default function Page({ params } : Params){
                                         <td>{FormatVND(room.price.toString())}</td>
                                         <td>{room.minPeople} - {room.maxPeople} people</td>
                                         <td>
-                                            <span className="text-decoration-underline text-primary cursor-pointer">View Room</span>
+                                            <span className="text-decoration-underline text-primary cursor-pointer" onClick={()=>handleClickViewRoom(room)}>View Room</span>
                                         </td>
                                     </tr>
                                 )) || (
@@ -189,6 +246,57 @@ export default function Page({ params } : Params){
                 </Form>
                 )}
             </Formik>
+
+
+            {/* MODAL BOOKING  */}
+            <div>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h4" component="h4" className="fw-bold">
+                            <span className="text-primary">ROOM</span> INFORMATION
+                        </Typography>
+                        <div className="row mt-2">
+                            <div className="col-12 col-sm-12 col-md-6">
+                                <Image alt={roomView?.roomName??''} src={PUBLIC_IMAGE_UPLOAD + roomView?.image} width={1000} height={1000} className="image-fit" style={{width:'100%',height:300,borderRadius:15}}/>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6">
+                                <p><b>Room Name: </b><span>{roomView?.roomName}</span></p>
+                                <p><b>People: </b><span>{roomView?.minPeople}-{roomView?.maxPeople}</span></p>
+                                <p><b>Price: </b><span>{FormatVND(roomView?.price + "")}</span></p>
+                                <p><b>Time serve:</b></p>
+                                <div role="group" aria-labelledby="my-radio-group">
+                                    {roomViewSlot && roomViewSlot.map((row, index) => (
+                                        <div className="mb-2" key={index}>
+                                            <label key={index}>
+                                                <input 
+                                                    type="radio" 
+                                                    className="form-check-input me-2" 
+                                                    name="SlotRadio" 
+                                                    value={row.slotID} 
+                                                    checked={index === selectedIndex}
+                                                    onChange={() => handleRadioChange(index)}
+                                                /> 
+                                                {TimeToString(row.startTime)}-{TimeToString(row.endTime)}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <p style={{textAlign:'justify'}} className="mt-2">
+                            {roomView?.description}
+                        </p>
+                        <div className="d-flex justify-content-center">
+                                <button className="btn btn-primary">BOOKING THIS ROOM</button>
+                        </div>
+                    </Box>
+                </Modal>
+            </div>
 
 
             </div>

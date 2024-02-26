@@ -1,0 +1,12 @@
+OAuth client created
+The client ID and secret can always be accessed from Credentials in APIs & Services
+
+OAuth access is restricted to the test users  listed on your OAuth consent screen
+Client ID
+118269517149-5h32otd4abv40semaco1t6uivk2l9e8d.apps.googleusercontent.com
+Client secret
+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
+Creation date
+February 26, 2024 at 4:11:20 PM GMT+7
+Status
+ Enabled

@@ -63,5 +63,12 @@ export async function ApiGetLatestRoom(page: number,size: number, hostId: number
     }
     return null;
 }
-
+export async function ApiGetRoomById(id: number){
+    const response = await fetch(Constant.API_GET_ROOM_BY_ID + id);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
     

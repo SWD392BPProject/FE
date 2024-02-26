@@ -12,6 +12,7 @@ import { STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constan
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { ApiLoginUser, ApiRegisterUser } from "@/service/UserService";
 import { UserInfoCookie } from "@/types";
+import { useSession, signIn, signOut } from "next-auth/react"
 export default function Page (){
     const formikRef = React.useRef<FormikProps<LoginFormValues>>(null);
     const router = useRouter();
@@ -77,6 +78,9 @@ export default function Page (){
             </Formik>
             <div className="mt-3 d-flex justify-content-center mb-4">
                 <Link href="/register" className="text-decoration-underline text-primary">Do not have account, sign up now?</Link>
+            </div>
+            <div className="mt-3 d-flex justify-content-center mb-4">
+                <Link href="#" className="text-decoration-underline text-primary" onClick={()=>signIn()}>GOOGLE LOGIN</Link>
             </div>
 
         </div>

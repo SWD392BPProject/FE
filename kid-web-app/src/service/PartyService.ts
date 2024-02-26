@@ -1,7 +1,7 @@
 import * as Constant from "@/common/Constant";
 import { JsonBody } from "@/types";
 
-export async function ApiCreateParty(HostUserId: number,PartyName: string, Address: string, Type: string, Description: string, Image: File | null, token: string){
+export async function ApiCreateParty(HostUserId: number,PartyName: string, Address: string, Type: string, Description: string, listMenu: string[], Image: File | null, token: string){
     var data = new FormData();    
     data.append("HostUserId", HostUserId.toString());
     data.append("PartyName", PartyName);
@@ -11,6 +11,9 @@ export async function ApiCreateParty(HostUserId: number,PartyName: string, Addre
     if (Image) {
         data.append("Image", Image);
     }
+    listMenu.forEach((value, index) => {
+        data.append(`MenuList[${index}]`, value);
+    });
     const response = await fetch(Constant.API_CREATE_PARTY, {
         method: "POST",
         body: data,

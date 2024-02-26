@@ -101,6 +101,9 @@ export default function MenuBarHeader(){
                                                 <li className="nav-item">
                                                     <Link className="nav-link" href="/host/room">Room</Link>
                                                 </li> 
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href="/host/menu">Menu</Link>
+                                                </li> 
                                             </>
                                         ) ||(
                                             <>
