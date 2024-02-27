@@ -37,6 +37,8 @@ export const USER_COOKIE = "userInfoCookie";
 */
 export const API_REGISTER_USER = URL_BASE_API + "/User/register";
 export const API_LOGIN = URL_BASE_API + "/User/login";
+export const API_LOGIN_WITH_GOOLE = URL_BASE_API + "/User/loginWithGoogle";
+
 /*
  ** MENU API
 */

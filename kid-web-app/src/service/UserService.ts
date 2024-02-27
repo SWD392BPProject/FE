@@ -36,3 +36,18 @@ export async function ApiLoginUser(Email: string, Password: string){
     }
     return null;
 }
+
+export async function ApiLoginWithGoogle(Email: string, FullName: string){
+    var data = new URLSearchParams();
+    data.append("Email", Email);
+    data.append("FullName", FullName);
+    const response = await fetch(Constant.API_LOGIN_WITH_GOOLE, {
+        method: "POST",
+        body: data,
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
