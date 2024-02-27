@@ -2,28 +2,29 @@
 import Image from "next/image";
 import { STATUS_CODE_OK, TABLE_DATA_SIZE, USER_COOKIE } from "@/common/Constant";
 import { ApiGetLatestParty } from "@/service/PartyService";
-import { Party, UserInfoCookie } from "@/types";
+import { Menu, Party, UserInfoCookie } from "@/types";
 import Link from "next/link";
 import React from "react";
 import { useCookies } from "react-cookie";
-import { GetLabelOfPartyType } from "@/util/TextUtil";
+import { FormatVND, GetLabelOfPartyType } from "@/util/TextUtil";
 import PaginationBar from "@/component/PaginationBar";
+import { ApiGetMenuByHostIDPaging } from "@/service/MenuService";
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
-    const [parties, setParties] = React.useState<Party[] | null>(null);
+    const [menus, setMenus] = React.useState<Menu[] | null>(null);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(0);
     React.useEffect(()=>{
-        fetchAllPartyByHostId(1);
+        fetchMenuByHostIDPaging(1);
     },[]);
 
-    async function fetchAllPartyByHostId(page: number){
+    async function fetchMenuByHostIDPaging(page: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            const result = await ApiGetLatestParty(page, TABLE_DATA_SIZE, userInfoCookie.userID);
+            const result = await ApiGetMenuByHostIDPaging(userInfoCookie.userID, page, TABLE_DATA_SIZE);
             if(result && result.code == STATUS_CODE_OK){
-                setParties(result.data);
+                setMenus(result.data);
                 const totalPage = result.totalPage ?? 1;
                 setTotalPage(totalPage);
                 window.scrollTo(0, 0);
@@ -33,7 +34,7 @@ export default function Page (){
 
     const handleChangePage = (num : number) => {
         setCurrentPage(num);
-        fetchAllPartyByHostId(num);
+        fetchMenuByHostIDPaging(num);
     }
 
     return(
@@ -49,20 +50,20 @@ export default function Page (){
                         <tr>
                             <th className="w-20">Name</th>
                             <th className="w-20">Image</th>
-                            <th className="w-20">Type</th>
-                            <th className="w-20">Address</th>
+                            <th className="w-20">Price</th>
+                            <th className="w-20">Description</th>
                             <th className="w-20">Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            { parties && parties.length > 0 && parties.map((party, index)=>(
+                            { menus && menus.length > 0 && menus.map((menu, index)=>(
                                 <tr key={index}>
-                                    <td>{party.partyName}</td>
+                                    <td>{menu.menuName}</td>
                                     <td>
-                                        <Image alt={""} width={400} height={400} src={"/ImageUpload/"+party.image} className="image-fit" style={{width: '100%', height: 150}} />
+                                        <Image alt={""} width={400} height={400} src={"/ImageUpload/"+menu.image} className="image-fit" style={{width: '100%', height: 150}} />
                                     </td>
-                                    <td>{GetLabelOfPartyType(party.type)}</td>
-                                    <td>{party.address}</td>
+                                    <td>{FormatVND(menu.price.toString())}</td>
+                                    <td>{menu.description}</td>
                                     <td>
                                         {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
                                         <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
