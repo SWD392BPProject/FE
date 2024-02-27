@@ -11,10 +11,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        clientId: "118269517149-5h32otd4abv40semaco1t6uivk2l9e8d.apps.googleusercontent.com",
+        clientSecret: "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",
     })
   ],
+  secret: "23u82t782y47y38r32r32ir345",
   callbacks: {
    
   },

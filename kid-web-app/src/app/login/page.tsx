@@ -80,7 +80,7 @@ export default function Page (){
                 <Link href="/register" className="text-decoration-underline text-primary">Do not have account, sign up now?</Link>
             </div>
             <div className="mt-3 d-flex justify-content-center mb-4">
-                <Link href="#" className="text-decoration-underline text-primary" onClick={()=>signIn()}>GOOGLE LOGIN</Link>
+                <Link href="#" className="text-decoration-underline text-primary" onClick={()=>signIn('google')}>GOOGLE LOGIN</Link>
             </div>
 
         </div>
