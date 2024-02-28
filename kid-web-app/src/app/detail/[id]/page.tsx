@@ -188,7 +188,9 @@ export default function Page({ params } : Params){
                                 <ShareIcon className="text-primary" /> <b className="ms-2">SHARE</b>
                             </div>
                         </div>
-                        <Image alt={party?.partyName??''} src={PUBLIC_IMAGE_UPLOAD + party?.image} width={1000} height={1000} className="image-fit" style={{width:'100%',height:500,borderRadius:15}}/>
+                        {party && (
+                            <Image alt={party.partyName??''} src={PUBLIC_IMAGE_UPLOAD + party.image} width={1000} height={1000} className="image-fit" style={{width:'100%',height:500,borderRadius:15}}/>
+                        )}
                     </div>
                 </div>
 
@@ -373,7 +375,7 @@ export default function Page({ params } : Params){
                                                             <tr key={index}>
                                                                 <td>{menu.menuName}</td>
                                                                 <td>
-                                                                    <Image alt={""} width={200} height={200} src={"/ImageUpload/"+menu.image} className="image-fit" style={{width: '100%', height: 100}} />
+                                                                    <Image alt={menu.menuName??'Error image'} width={200} height={200} src={"/ImageUpload/"+menu.image} className="image-fit" style={{width: '100%', height: 100}} />
                                                                 </td>
                                                                 <td>{FormatVND(menu.price.toString())}</td>
                                                                 <td>{menu.description}</td>

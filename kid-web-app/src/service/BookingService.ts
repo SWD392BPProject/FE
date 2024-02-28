@@ -1,5 +1,6 @@
 import * as Constant from "@/common/Constant";
-import { JsonBody } from "@/types";
+import { JsonBody, MomoReponse } from "@/types";
+import crypto from 'crypto'; 
 
 export async function ApiCreateBooking(
         UserID: number,
@@ -29,4 +30,41 @@ export async function ApiCreateBooking(
     return null
 }
 
+export async function ApiGetBookingByID(bookingID: number){
+    const response = await fetch(Constant.API_GET_BOOKING_BY_ID + bookingID);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
 
+export async function ApiChangeBookingStatus(bookingID: number, status: string){
+    const response = await fetch(Constant.API_CHANGE_STATUS_BOOKING + bookingID + "/" + status);
+    if(response.ok){ 
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+export async function ApiPaymentMomo(amount: string, title: string){
+    try {
+        const response = await fetch('/api/momo-payment', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount,
+                title
+            // Thêm các thông tin cần thiết cho yêu cầu API của bạn
+            }),
+        });
+        const data = await response.json();
+        return data as MomoReponse;
+    } catch (error) {
+        console.error('Error calling API:', error);
+    }
+    return null;
+}

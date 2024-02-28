@@ -79,9 +79,20 @@ export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";
  ** BOOKING API
 */
 export const API_CREATE_BOOKING = URL_BASE_API + "/Booking";
+export const API_GET_BOOKING_BY_ID = URL_BASE_API + "/Booking/";
+export const API_CHANGE_STATUS_BOOKING = URL_BASE_API + "/Booking/changeStatus/";
+
 
 export const DESCRIPTION_SHORT_LENGTH = 200;
 export const TITLE_SHORT_LENGTH = 38;
+
+/*
+ ** BOOKING STATUS
+*/
+export const BOOKING_STATUS_CREATE = "Create";
+export const BOOKING_STATUS_PAID = "Paid";
+export const BOOKING_STATUS_DONE = "Done";
+export const BOOKING_STATUS_CANCEL = "Cancel";
 
 /*
  ** PACKAGE TYPE LIST

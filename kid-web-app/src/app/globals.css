@@ -175,6 +175,15 @@ a {
 .bg-graylight{
   background-color: #eeeeee;
 }
+
+.border-tbl-gray {
+  border: #eeeeee solid 1px;
+}
+.border-tbl-gray-nl{
+  border-top: #eeeeee solid 1px;
+  border-bottom: #eeeeee solid 1px;
+  border-right: #eeeeee solid 1px;
+}
 .border-tbl-gray-1 {
   border-top: #eeeeee solid 1px;
   border-bottom: #eeeeee solid 1px;

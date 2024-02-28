@@ -48,6 +48,35 @@ export interface Room {
     hostUserId: number,
 }
 
+export interface Booking {
+    bookingID: number,
+    partyName: string,
+    roomName: string,
+    roomPrice: number,
+    menuName: number,
+    menuPrice: number,
+    menuDescription: string,
+    diningTable: number,
+    slotTimeStart: string,
+    slotTimeEnd: string,
+    bookingDate: string,
+    status: string,
+    paymentAmount: number,
+}
+
+export interface MomoReponse {
+    amount : number,
+    deeplink : string,
+    message : string,
+    orderId : string,
+    partnerCode : string,
+    payUrl : string,
+    qrCodeUrl : string,
+    requestId : string,
+    responseTime : number,
+    resultCode : number,
+}
+
 export interface Slot {
     slotID: number,
     startTime: string,
