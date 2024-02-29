@@ -80,6 +80,7 @@ export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";
 */
 export const API_CREATE_BOOKING = URL_BASE_API + "/Booking";
 export const API_GET_BOOKING_BY_ID = URL_BASE_API + "/Booking/";
+export const API_GET_BOOKING_BY_USER_ID = URL_BASE_API + "/Booking/byUserID/";
 export const API_CHANGE_STATUS_BOOKING = URL_BASE_API + "/Booking/changeStatus/";
 
 

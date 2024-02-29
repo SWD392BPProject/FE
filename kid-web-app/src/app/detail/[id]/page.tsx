@@ -20,6 +20,7 @@ import Modal from '@mui/material/Modal';
 import { ApiGetSlotByRoomID } from "@/service/SlotService";
 import { ApiGetMenuByPartyID } from "@/service/MenuService";
 import { ApiCreateBooking } from "@/service/BookingService";
+import { useRouter } from "next/navigation";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -53,6 +54,7 @@ export default function Page({ params } : Params){
     const [isBookRoom, setIsBookRoom] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const router = useRouter();
 
     const currentDate = new Date();
     const tomorrowDate = new Date(currentDate);
@@ -116,6 +118,7 @@ export default function Page({ params } : Params){
                 alert("Booking successfully!");
                 setIsBookRoom(false);
                 handleClose();
+                router.push("/payment/" + result.data.bookingID);
             }else{
                 alert("Booking failed");
             }

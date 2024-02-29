@@ -147,7 +147,9 @@ export default function Home() {
                 Liên hệ ngay: 
             </p>
             <span>Email: kidbooking-support@kidbk.com</span>
-            <button className="btn btn-primary mt-3">BOOKING NOW</button>
+            <div>
+              <button className="btn btn-primary mt-3">BOOKING NOW</button>
+            </div>
            
           </div>
 

@@ -66,8 +66,8 @@ export default function MenuBarHeader(){
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center justify-content-end">
-                        <Link href={"/login"}><span className="text-primary cursor-pointer">{isLogged?"Đăng xuất":"Đăng nhập"} |</span></Link>
-                        <span className="ms-2 text-danger cursor-pointer">Giỏ hàng</span>
+                        <Link href={"/login"}><span className="text-primary cursor-pointer">{isLogged?"LOGOUT":"LOGIN"} |</span></Link>
+                        <span className="ms-2 text-danger cursor-pointer">CART</span>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@ export default function MenuBarHeader(){
                 <div className="col-12 col-sm-12 col-md-9 d-flex row">
                     <nav className="navbar navbar-expand-sm">
                         <div className="container-fluid m-0 p-0">
-                        <Link className="navbar-brand" href="/">Trang chủ</Link>
+                        <Link className="navbar-brand" href="/">HOME</Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                             <span className="navbar-toggler-icon"></span>
                         </button>
@@ -108,14 +108,13 @@ export default function MenuBarHeader(){
                                         ) ||(
                                             <>
                                                 <li className="nav-item">
-                                                    <a className="nav-link" href="#">Thương hiệu</a>
+                                                    <a className="nav-link" href="#">Store</a>
                                                 </li>
                                                 <li className="nav-item dropdown">
-                                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">TP Dinh dưỡng</a>
+                                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">My account</a>
                                                     <ul className="dropdown-menu">
-                                                    <li><a className="dropdown-item" href="#">Vitamin</a></li>
-                                                    <li><a className="dropdown-item" href="#">Khoáng chất</a></li>
-                                                    <li><a className="dropdown-item" href="#">Thảo dược</a></li>
+                                                        <li><a className="dropdown-item" href="#">Profile</a></li>
+                                                        <li><Link className="dropdown-item" href="/orders">Orders</Link></li>
                                                     </ul>
                                                 </li>
                                                 <li className="nav-item">

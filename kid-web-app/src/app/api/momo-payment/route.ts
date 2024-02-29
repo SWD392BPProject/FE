@@ -7,13 +7,13 @@ export async function POST(req: Request, res : NextApiResponse) {
         return Response.json('code 405');
       }
 
-      const {amount, title} = await req.json();
+      const {amount, title, orderId} = await req.json();
 
       var partnerCode = "MOMO";
         var accessKey = "F8BBA842ECF85";
         var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
         var requestId = partnerCode + new Date().getTime();
-        var orderId = requestId;
+        var orderIdString = orderId + "_" + requestId;
         var orderInfo = title;
         var redirectUrl = "http://localhost:3000/momo/return";
         var ipnUrl = "https://callback.url/notify";
@@ -22,7 +22,7 @@ export async function POST(req: Request, res : NextApiResponse) {
         var requestType = "captureWallet"
         var extraData = ""; //pass empty value if your merchant does not have stores
     
-        var rawSignature = "accessKey="+accessKey+"&amount=" + amount+"&extraData=" + extraData+"&ipnUrl=" + ipnUrl+"&orderId=" + orderId+"&orderInfo=" + orderInfo+"&partnerCode=" + partnerCode +"&redirectUrl=" + redirectUrl+"&requestId=" + requestId+"&requestType=" + requestType
+        var rawSignature = "accessKey="+accessKey+"&amount=" + amount+"&extraData=" + extraData+"&ipnUrl=" + ipnUrl+"&orderId=" + orderIdString+"&orderInfo=" + orderInfo+"&partnerCode=" + partnerCode +"&redirectUrl=" + redirectUrl+"&requestId=" + requestId+"&requestType=" + requestType
         var signature = crypto.createHmac('sha256', secretkey)
         .update(rawSignature)
         .digest('hex');
@@ -33,7 +33,7 @@ export async function POST(req: Request, res : NextApiResponse) {
             accessKey : accessKey,
             requestId : requestId,
             amount : amount,
-            orderId : orderId,
+            orderId : orderIdString,
             orderInfo : orderInfo,
             redirectUrl : redirectUrl,
             ipnUrl : ipnUrl,

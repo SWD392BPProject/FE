@@ -29,7 +29,7 @@ export default function Page({ params } : Params){
 
     const handleClickBuyNow = async () => {
         if(booking){
-            const result = await ApiPaymentMomo((booking.paymentAmount / 1000).toString(), booking.partyName) as MomoReponse;
+            const result = await ApiPaymentMomo((booking.paymentAmount / 1000).toString(), booking.partyName, booking.bookingID.toString()) as MomoReponse;
             if(result){
                 router.push(result.payUrl);
             }
@@ -129,7 +129,7 @@ export default function Page({ params } : Params){
                     </div>
                 </div>
                 <div className="d-flex justify-content-center my-3">
-                    <button className="btn btn-primary" onClick={handleClickBuyNow}>BUY NOW</button>
+                    <button className="btn btn-warning" onClick={handleClickBuyNow}>PAY NOW</button>
                 </div>
             </div>
         </div>
