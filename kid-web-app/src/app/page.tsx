@@ -9,6 +9,7 @@ import { Party } from "@/types";
 import { GetLabelOfPartyType } from "@/util/TextUtil";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   const [carouselParties, setCarouselParties] = React.useState<Party[] | null>(null);
@@ -202,10 +203,10 @@ export default function Home() {
               <span className="fs-24 my-3">TOP VIEWED IN MONTH</span>
               <div className="row bg-white border-r-gray-1 mt-3 m-0 py-2" style={{borderRadius:10}}>
                   {topMonthPaties && topMonthPaties.map((row, index)=>(
-                    <div key={index} className="col-6 col-sm-6 col-md-3">
+                    <Link href={"/detail/"+row.partyID} key={index} className="col-6 col-sm-6 col-md-3 text-hover-lightblue pt-3">
                         <Image alt={""} src={PUBLIC_IMAGE_UPLOAD + row.image} width={500} height={500} style={{width:'100%',height:200,borderRadius:15}}/>
                         <span>{row.partyName}</span>
-                    </div>
+                    </Link>
                   ))}
               </div>
           </div>

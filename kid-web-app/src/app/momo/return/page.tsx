@@ -28,6 +28,10 @@ export default function Page (){
             }, seconds * 1000);
         };
 
+        if(resultCode == "0"){
+            fetchChagneStatusBooking(orderId??'0');
+        }
+
         redirectAfterSeconds(3);
     }, [router]);
 
@@ -35,12 +39,6 @@ export default function Page (){
         var split = orderId.split("_");
         var id = split[0];
         const result = await ApiChangeBookingStatus(id, BOOKING_STATUS_PAID);
-        if(result && result.code == STATUS_CODE_OK){
-            alert("Payment successfully!");
-        }
-        else{
-            alert("Payment failed!");
-        }
     }
     
 
