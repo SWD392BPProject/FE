@@ -35,8 +35,8 @@ export default function Home() {
   }
 
 
-  function handleSubmitSearch(values: { PartyName: string; Address: string; Type: string; Description: string; }): any {
-    router.push("/search");
+  function handleSubmitSearch(values: { DateBooking: string; People: string; Type: string; }): any {
+    router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}`);
   }
 
   return (<div>
@@ -47,10 +47,9 @@ export default function Home() {
         {/* BOOKING SEARCH */}
         <Formik 
           initialValues={{
-              PartyName: 'Tiệc sinh nhật LUXURY',
-              Address: 'Hồ Chí Minh',
+              People: '',
+              DateBooking: '',
               Type: PARTY_TYPE_LIST[0].value,
-              Description: "Một sinh nhật thật ý nghĩa và đặc biệt để đánh dấu cột mốc quan trọng của các thiên thần nhỏ luôn là điều bố mẹ băn khoăn? Với sự đa dạng trong các gói tiệc sinh nhật, tiNi hứa hẹn sẽ mang đến cho các thiên thần nhỏ một bữa tiệc đầy bất ngờ và tràn ngập những khoảnh khắc đáng nhớ.",
           }}
           onSubmit={values=>handleSubmitSearch(values)}>
               {({ errors, setFieldValue, touched }) => (
@@ -66,10 +65,10 @@ export default function Home() {
                     </Field>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 form-group p-0 pt-2">
-                  <Field type="number" className="form-control py-3" placeholder="Số người" />
+                  <Field type="number" name="People" className="form-control py-3" placeholder="Số người" />
                 </div>
                 <div className="col-12 col-sm-12 col-md-12 form-group p-0 pt-2">
-                    <Field type="date" className="form-control py-3" placeholder="Ngày book" />
+                    <Field type="date" name="DateBooking" className="form-control py-3" placeholder="Ngày book" />
                 </div>
               </div>
               <div className="col-12 col-sm-12 col-md-2 row pt-2">

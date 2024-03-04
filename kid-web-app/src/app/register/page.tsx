@@ -27,7 +27,6 @@ export default function Page (){
 
     const handleSubmitRegister = async (values : RegisterFormValues) => {
         const result = await ApiRegisterUser(values.FullName, values.Email, values.Password, values.PhoneNumber, values.Role, thumbnailImage);
-        console.log(result);
         if(result?.code==STATUS_CODE_OK){
             alert("Create an account successfully!");
             setCookieUser(USER_COOKIE, result.data, {path: "/"});

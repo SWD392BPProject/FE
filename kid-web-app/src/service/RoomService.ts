@@ -72,3 +72,19 @@ export async function ApiGetRoomById(id: number){
     return null;
 }
     
+export async function ApiGetRoomForRent(Type: string, DateBooking: string, SlotTime :string, People: string, page: number, size: number, partyId: number){
+    const data = new URLSearchParams();
+    data.append("Type", Type);
+    data.append("DateBooking", DateBooking);
+    data.append("SlotTime", SlotTime);
+    data.append("People", People.toString());
+    const response = await fetch(Constant.API_GET_ROOM_FOR_RENT + page + "/" + size + "/" + partyId,{
+        method: "POST",
+        body: data
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}

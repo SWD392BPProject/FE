@@ -59,7 +59,7 @@ export async function ApiGetPartyById(id: number){
     return null;
 }
 
-export async function ApiGetPartiesSearch(Type: string, DateBooking: string, SlotTime :string, People: number, page: number, size: number){
+export async function ApiGetPartiesSearch(Type: string, DateBooking: string, SlotTime :string, People: string, page: number, size: number){
     const data = new URLSearchParams();
     data.append("Type", Type);
     data.append("DateBooking", DateBooking);

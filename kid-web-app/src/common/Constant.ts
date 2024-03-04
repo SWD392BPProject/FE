@@ -68,6 +68,8 @@ export const API_GET_SLOT_BY_ROOM_ID = URL_BASE_API + "/Slot/byRoomID/";
 export const API_CREATE_ROOM = URL_BASE_API + "/Room";
 export const API_GET_LATEST_ROOM = URL_BASE_API + "/Room/";
 export const API_GET_ROOM_BY_ID = URL_BASE_API + "/Room/";
+export const API_GET_ROOM_FOR_RENT = URL_BASE_API + "/Room/RoomForRent/";
+
 
 /*
  ** PACKAGE API
