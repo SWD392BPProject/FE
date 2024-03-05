@@ -14,7 +14,7 @@ import { ChangeEvent } from "react";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React from "react";
 import { ApiCreateParty } from "@/service/PartyService";
-import { ApiCreateMenu } from "@/service/MenuService";
+import { ApiCreateOrUpdateMenu } from "@/service/MenuService";
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
@@ -41,7 +41,7 @@ export default function Page (){
     const handleSubmitMenu = async (values : MenuFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            var result = await ApiCreateMenu(userInfoCookie.userID,values.MenuName, values.Price, values.Description, thumbnailImage, userInfoCookie.token);
+            var result = await ApiCreateOrUpdateMenu(userInfoCookie.userID,values.MenuName, values.Price, values.Description, thumbnailImage, userInfoCookie.token);
             if(result?.code==STATUS_CODE_OK){
                 alert("Create menu successfully!");
             }else if(result?.code==STATUS_CODE_ERROR){
@@ -113,7 +113,7 @@ export default function Page (){
                                 <Button type="submit" variant="contained" startIcon={<AddIcon />} color="primary">
                                     Register
                                 </Button>
-                                <Link href="/host/party" className="ms-2">
+                                <Link href="/host/menu" className="ms-2">
                                     <ThemeProvider theme={ColorUtil.ColorGray}>
                                         <Button variant="contained" color="primary">back</Button>
                                     </ThemeProvider>

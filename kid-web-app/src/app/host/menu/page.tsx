@@ -15,6 +15,7 @@ export default function Page (){
     const [menus, setMenus] = React.useState<Menu[] | null>(null);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(0);
+
     React.useEffect(()=>{
         fetchMenuByHostIDPaging(1);
     },[]);
@@ -65,6 +66,7 @@ export default function Page (){
                                     <td>{FormatVND(menu.price.toString())}</td>
                                     <td>{menu.description}</td>
                                     <td>
+                                        <Link href={"/host/menu/edit/" + menu.menuID} className="text-decoration-underline text-primary">Edit</Link>
                                         {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
                                         <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
                                     </td>
