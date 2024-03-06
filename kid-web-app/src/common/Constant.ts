@@ -36,6 +36,9 @@ export const USER_COOKIE = "userInfoCookie";
 /*
  ** USER API
 */
+export const API_CHANGE_PASSWORD = URL_BASE_API + "/User/changePW";
+export const API_USER_UPDATE_INFO = URL_BASE_API + "/User/updateInfo";
+export const API_USER_ORIGIN = URL_BASE_API + "/User/";
 export const API_REGISTER_USER = URL_BASE_API + "/User/register";
 export const API_LOGIN = URL_BASE_API + "/User/login";
 export const API_LOGIN_WITH_GOOLE = URL_BASE_API + "/User/loginWithGoogle";
@@ -100,6 +103,13 @@ export const BOOKING_STATUS_CREATE = "Create";
 export const BOOKING_STATUS_PAID = "Paid";
 export const BOOKING_STATUS_DONE = "Done";
 export const BOOKING_STATUS_CANCEL = "Cancel";
+
+/*
+ ** ROLE LIST
+*/
+export const ROLE_HOST = "Host";
+export const ROLE_ADMIN = "Admin";
+export const ROLE_USER = "User";
 
 /*
  ** PACKAGE TYPE LIST

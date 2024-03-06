@@ -50,9 +50,9 @@ export default function Page({ params } : Params){
     const [roomViewSlot, setRoomViewSlot] = React.useState<Slot[] | null>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [selectedMenuIndex, setSelectedMenuIndex] = React.useState(0);
-    const [open, setOpen] = React.useState(false);
     const [isBookRoom, setIsBookRoom] = React.useState(false);
     const [isSearching, setIsSearching] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const router = useRouter();

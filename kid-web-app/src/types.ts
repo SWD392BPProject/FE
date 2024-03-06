@@ -7,13 +7,15 @@ export interface JsonBody {
 }
 
 export interface User {
-    UserID: number,
-    FullName: string,
-    Email: string,
-    Password: string,
-    Role: string,
-    Status: string,
-    Token: string,
+    userID: number,
+    fullName: string,
+    phoneNumber: string,
+    email: string,
+    image: string,
+    password: string,
+    role: string,
+    status: string,
+    token: string,
 }
 
 export interface Party {
