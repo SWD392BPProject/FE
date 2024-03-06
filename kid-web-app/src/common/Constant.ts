@@ -81,8 +81,11 @@ export const API_GET_ROOM_FOR_RENT = URL_BASE_API + "/Room/RoomForRent/";
 /*
  ** PACKAGE API
 */
+export const API_PACKAGE_ORIGIN = URL_BASE_API + "/Package/";
+export const API_GET_PACKAGE_ORDER_BY_ID = URL_BASE_API + "/Package/orderId/";
 export const API_CREATE_PACKAGE = URL_BASE_API + "/Package";
 export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";
+export const API_CREATE_PACKAGE_ORDER = URL_BASE_API + "/Package/createOrder";
 
 /*
  ** BOOKING API
@@ -117,19 +120,19 @@ export const ROLE_USER = "User";
 export const PACKAGE_TYPE_LIST = [
     {
         value: 30,
-        label: "1 tháng"
+        label: "1 Month"
     },
     {
         value: 90,
-        label: "3 tháng"
+        label: "3 Months"
     },
     {
         value: 365,
-        label: "1 năm"
+        label: "1 Year"
     },
     {
         value: 730,
-        label: "2 năm"
+        label: "2 Years"
     },
 ];
 /*

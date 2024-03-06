@@ -126,6 +126,9 @@ export default function MenuBarHeader(){
                                                 <li className="nav-item">
                                                     <Link className="nav-link" href="/host/menu">Menu</Link>
                                                 </li> 
+                                                <li className="nav-item">
+                                                    <Link className="nav-link fw-bold text-warning" href="/host/buy-package">BUY PACKAGE</Link>
+                                                </li> 
                                             </>
                                         ) ||(
                                             <>

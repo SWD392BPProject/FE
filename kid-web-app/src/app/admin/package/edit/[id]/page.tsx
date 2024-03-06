@@ -6,30 +6,46 @@ import Link from "next/link";
 import * as ColorUtil from "@/common/ColorUtil";
 import AddIcon from '@mui/icons-material/Add';
 import * as Yup from 'yup';
-import { UserInfoCookie, Option } from "@/types";
+import { UserInfoCookie, Option, Package } from "@/types";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-import {PACKAGE_TYPE_LIST, PARTY_TYPE_LIST, STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constant";
+import {PACKAGE_TYPE_LIST, PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constant";
 import { ChangeEvent } from "react";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React from "react";
 import { ApiCreateParty } from "@/service/PartyService";
 import { ApiCreateRoom } from "@/service/RoomService";
-import { ApiCreatePackage } from "@/service/PackageService";
+import { ApiCreatePackage, ApiGetPackageByID } from "@/service/PackageService";
 
-export default function Page (){
+type Params = {
+    params: {
+        id: string;
+    }
+}
+export default function Page ({ params } : Params){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const router = useRouter()
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [thumbnailImage, setThumbnailImage] = React.useState<File | null>(null);
+    const [thumbnailLink, setThumbnailLink] = React.useState<string | null>(null);
     const [thumbnailImageSrc, setThumbnailImageSrc] = React.useState<string | undefined>(undefined);
     const [optionType,setOptionType] = React.useState<Option[] | null>(null);
     const [listType, setListType] = React.useState<string[] | null>(null);
     const [optionTypeSelected,setOptionTypeSelected] = React.useState<Option[] | null>(null);
-
+    const [packageObj, setPackage] = React.useState<Package | null>(null);
     React.useEffect(()=>{
         fetchTypeServe();
+        fetchPackageByID(params.id);
     },[]);
+
+    async function fetchPackageByID(id: string){
+        const result = await ApiGetPackageByID(id);
+        if(result && result.code == STATUS_CODE_OK){
+            const packageData = result.data as Package;
+            setPackage(packageData);
+            setThumbnailLink(packageData.image);
+        }
+    }
 
     const handleAddPhotoClick = () => {
         if (inputRef.current) {
@@ -49,13 +65,13 @@ export default function Page (){
     const handleSubmitPackage = async (values : PartyFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            var result = await ApiCreatePackage(userInfoCookie.userID,values.PackageName, values.Price, values.ActiveDays, values.Description, thumbnailImage, userInfoCookie.token);
+            var result = await ApiCreatePackage(userInfoCookie.userID,values.PackageName, values.Price, values.ActiveDays, values.Description, thumbnailImage, userInfoCookie.token, packageObj?.packageID.toString());
             if(result?.code==STATUS_CODE_OK){
-                alert("Create package successfully!");
+                alert("Edit package successfully!");
             }else if(result?.code==STATUS_CODE_ERROR){
                 alert(result?.message);
             }else{
-                alert("Create package failed!");
+                alert("Edit package failed!");
             }
         }
     }
@@ -97,13 +113,14 @@ export default function Page (){
     return(
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-                <h1 className="fw-bold text-primary">PACKAGE <span className="text-dark">CREATE</span></h1>
+                <h1 className="fw-bold text-primary">PACKAGE <span className="text-dark">EDIT</span></h1>
+                {packageObj && (
                 <Formik 
                     initialValues={{
-                        PackageName: 'Gói Member',
-                        Price: 1000000,
-                        ActiveDays: PACKAGE_TYPE_LIST[0].value,
-                        Description: "Gói dịch vụ tổng hợp sử dụng dịch vụ cao cấp của Kid Booking với hàng ngàng tính năng vượt trội. Miễn phí truy cập và đăng tải dịch vụ Booking của cá nhân hoặc tổ chức. Mang đến trải nghiệm dịch vụ tuyệt vời cho các Host Party trên toàn quốc."
+                        PackageName: packageObj.packageName,
+                        Price: packageObj.price,
+                        ActiveDays: packageObj.activeDays,
+                        Description: packageObj.description
                     }}
                     validationSchema={PartyValidateSchema}
                     onSubmit={values=>handleSubmitPackage(values)}>
@@ -149,6 +166,10 @@ export default function Page (){
                                             <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
                                                 <Image alt={""} width={600} height={600} src={thumbnailImageSrc} className="border-radius-black image-fit w-100"  style={{maxHeight:445}} />
                                             </div>
+                                        ) || thumbnailLink && (
+                                            <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
+                                                <Image alt={""} width={600} height={600} src={PUBLIC_IMAGE_UPLOAD + thumbnailLink} className="border-radius-black image-fit w-100"  style={{maxHeight:445}} />
+                                            </div>
                                         ) || (
                                             <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
                                                 <AddAPhotoIcon style={{fontSize:56}} />
@@ -163,7 +184,7 @@ export default function Page (){
                             
                             <div className="mt-4">
                                 <Button type="submit" variant="contained" startIcon={<AddIcon />} color="primary">
-                                    Register
+                                    Save
                                 </Button>
                                 <Link href="/admin/package" className="ms-2">
                                     <ThemeProvider theme={ColorUtil.ColorGray}>
@@ -173,7 +194,8 @@ export default function Page (){
                             </div>
                         </Form>
                         )}
-            </Formik>
+                </Formik>
+                )}
             </div>
         </div>
     );

@@ -9,21 +9,24 @@ import { useCookies } from "react-cookie";
 import { FormatVND, GetLabelOfPackageType, GetLabelOfPartyType } from "@/util/TextUtil";
 import PaginationBar from "@/component/PaginationBar";
 import { ApiGetLatestRoom } from "@/service/RoomService";
-import { ApiGetLatestPackage } from "@/service/PackageService";
-
+import { ApiDeletePackageByID, ApiGetLatestPackage } from "@/service/PackageService";
+import { Button } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const [packages, setPackages] = React.useState<Package[] | null>(null);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(0);
     React.useEffect(()=>{
-        fetchAllPackageByHostId(1);
+        fetchAllPackage(1);
     },[]);
 
-    async function fetchAllPackageByHostId(page: number){
+    async function fetchAllPackage(page: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            const result = await ApiGetLatestPackage(page, TABLE_DATA_SIZE, userInfoCookie.userID);
+            const result = await ApiGetLatestPackage(page, TABLE_DATA_SIZE);
             if(result && result.code == STATUS_CODE_OK){
                 setPackages(result.data);
                 const totalPage = result.totalPage ?? 1;
@@ -35,14 +38,27 @@ export default function Page (){
 
     const handleChangePage = (num : number) => {
         setCurrentPage(num);
-        fetchAllPackageByHostId(num);
+        fetchAllPackage(num);
+    }
+
+    async function handleClickDeleteById(id: string){
+        const resultCf = confirm("Are you sure delete this package?")
+        if(resultCf){
+            const result = await ApiDeletePackageByID(id);
+            if(result && result.code == STATUS_CODE_OK){
+                alert("Delete package successfully!");
+                fetchAllPackage(currentPage);
+            }else{
+                alert("Delete package failed!");
+            }
+        }
     }
 
     return(
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-                <h1 className="fw-bold text-danger">PACKAGE <span className="text-dark">MANAGEMENT</span></h1>
-                <Link href="/admin/package/create"><button className="btn btn-danger">+ ADD PACKAGE</button></Link>
+                <h1 className="fw-bold text-primary">PACKAGE <span className="text-dark">MANAGEMENT</span></h1>
+                <Link href="/admin/package/create"><Button variant="contained" color="primary" startIcon={<AddIcon />}>CREATE PACKAGE</Button></Link>
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">
@@ -66,8 +82,8 @@ export default function Page (){
                                     <td>{GetLabelOfPackageType(row.activeDays)}</td>
                                     <td>{FormatVND(row.price.toString())}</td>
                                     <td>
-                                        {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
-                                        <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
+                                        <Link href={"/admin/package/edit/" + row.packageID} className="text-decoration-underline text-primary me-2"><Button variant="contained" color="primary" startIcon={<EditIcon />}>Edit</Button></Link>
+                                        <Button variant="contained" className="bg-dark" startIcon={<DeleteIcon />} onClick={()=>handleClickDeleteById(row.packageID.toString())}>Delete</Button>
                                     </td>
                                 </tr>
                             )) || (

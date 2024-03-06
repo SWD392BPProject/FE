@@ -21,7 +21,6 @@ type Params = {
         id: string;
     }
 }
-
 export default function Page ({ params } : Params){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const router = useRouter()

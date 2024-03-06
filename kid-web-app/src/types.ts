@@ -66,6 +66,16 @@ export interface Booking {
     paymentAmount: number,
 }
 
+export interface PackageOrder{
+    packageOrderID: number,
+    packageName: string,
+    packageDescription: string,
+    packagePrice: number,
+    activeDays: number,
+    paymentAmount: number,
+    status: string,
+}
+
 export interface MomoReponse {
     amount : number,
     deeplink : string,
