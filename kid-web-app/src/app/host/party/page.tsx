@@ -1,13 +1,17 @@
 'use client'
 import Image from "next/image";
 import { STATUS_CODE_OK, TABLE_DATA_SIZE, USER_COOKIE } from "@/common/Constant";
-import { ApiGetLatestParty } from "@/service/PartyService";
+import { ApiDeletePartyByID, ApiGetLatestParty } from "@/service/PartyService";
 import { Party, UserInfoCookie } from "@/types";
 import Link from "next/link";
 import React from "react";
 import { useCookies } from "react-cookie";
 import { GetLabelOfPartyType } from "@/util/TextUtil";
 import PaginationBar from "@/component/PaginationBar";
+import { Button } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
@@ -17,6 +21,19 @@ export default function Page (){
     React.useEffect(()=>{
         fetchAllPartyByHostId(1);
     },[]);
+
+    async function handleClickDeleteById(id: string){
+        const resultCf = confirm("Are you sure delete this party?")
+        if(resultCf){
+            const result = await ApiDeletePartyByID(id);
+            if(result && result.code == STATUS_CODE_OK){
+                alert("Delete party successfully!");
+                fetchAllPartyByHostId(currentPage);
+            }else{
+                alert("Delete party failed!");
+            }
+        }
+    }
 
     async function fetchAllPartyByHostId(page: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
@@ -40,7 +57,8 @@ export default function Page (){
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
                 <h1 className="fw-bold text-primary">PARTY <span className="text-dark">MANAGEMENT</span></h1>
-                <Link href="/host/party/create"><button className="btn btn-primary">+ ADD PARTY</button></Link>
+                <Link href="/host/party/create"><Button variant="contained" color="primary" startIcon={<AddIcon />}>CREATE PARTY</Button></Link>
+
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">
@@ -64,8 +82,8 @@ export default function Page (){
                                     <td>{GetLabelOfPartyType(party.type)}</td>
                                     <td>{party.address}</td>
                                     <td>
-                                        {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
-                                        <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
+                                        <Link href={"/host/party/edit/" + party.partyID} className="text-decoration-underline text-primary me-2"><Button variant="contained" color="primary" startIcon={<EditIcon />}>Edit</Button></Link>
+                                        <Button variant="contained" className="bg-dark" startIcon={<DeleteIcon />} onClick={()=>handleClickDeleteById(party.partyID.toString())}>Delete</Button>
                                     </td>
                                 </tr>
                             )) || (

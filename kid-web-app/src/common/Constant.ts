@@ -43,6 +43,7 @@ export const API_LOGIN_WITH_GOOLE = URL_BASE_API + "/User/loginWithGoogle";
 /*
  ** MENU API
 */
+export const API_MENU_ORIGIN = URL_BASE_API + "/Menu/";
 export const API_CREATE_MENU = URL_BASE_API + "/Menu";
 export const API_GET_MENU_BY_PARTY_ID = URL_BASE_API + "/Menu/byPartyId/";
 export const API_GET_MENU_BY_ID = URL_BASE_API + "/Menu/";
@@ -52,6 +53,7 @@ export const API_GET_MENU_BY_HOST_ID_PAGING = URL_BASE_API + "/Menu/byHostIdPagi
 /*
  ** PARTY API
 */
+export const API_PARTY_ORIGIN = URL_BASE_API + "/Party/";
 export const API_CREATE_PARTY = URL_BASE_API + "/Party";
 export const API_GET_LATEST_PARTY = URL_BASE_API + "/Party/";
 export const API_GET_TOP_MONTH_PARTY = URL_BASE_API + "/Party/TopMonth/";
@@ -66,6 +68,7 @@ export const API_GET_SLOT_BY_ROOM_ID = URL_BASE_API + "/Slot/byRoomID/";
 /*
  ** ROOM API
 */
+export const API_ROOM_ORIGIN = URL_BASE_API + "/Room/";
 export const API_CREATE_ROOM = URL_BASE_API + "/Room";
 export const API_GET_LATEST_ROOM = URL_BASE_API + "/Room/";
 export const API_GET_ROOM_BY_ID = URL_BASE_API + "/Room/";

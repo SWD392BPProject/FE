@@ -1,14 +1,18 @@
 'use client'
 import Image from "next/image";
 import { STATUS_CODE_OK, TABLE_DATA_SIZE, USER_COOKIE } from "@/common/Constant";
-import { ApiGetLatestParty } from "@/service/PartyService";
+import { ApiDeletePartyByID, ApiGetLatestParty } from "@/service/PartyService";
 import { Party, Room, UserInfoCookie } from "@/types";
 import Link from "next/link";
 import React from "react";
 import { useCookies } from "react-cookie";
 import { FormatVND, GetLabelOfPartyType } from "@/util/TextUtil";
 import PaginationBar from "@/component/PaginationBar";
-import { ApiGetLatestRoom } from "@/service/RoomService";
+import { ApiDeleteRoomByID, ApiGetLatestRoom } from "@/service/RoomService";
+import { Button } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
@@ -18,6 +22,19 @@ export default function Page (){
     React.useEffect(()=>{
         fetchAllRoomByHostId(1);
     },[]);
+
+    async function handleClickDeleteById(id: string){
+        const resultCf = confirm("Are you sure delete this room?")
+        if(resultCf){
+            const result = await ApiDeleteRoomByID(id);
+            if(result && result.code == STATUS_CODE_OK){
+                alert("Delete room successfully!");
+                fetchAllRoomByHostId(currentPage);
+            }else{
+                alert("Delete room failed!");
+            }
+        }
+    }
 
     async function fetchAllRoomByHostId(page: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
@@ -41,7 +58,8 @@ export default function Page (){
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
                 <h1 className="fw-bold text-primary">ROOM <span className="text-dark">MANAGEMENT</span></h1>
-                <Link href="/host/room/create"><button className="btn btn-primary">+ ADD ROOM</button></Link>
+                <Link href="/host/room/create"><Button variant="contained" color="primary" startIcon={<AddIcon />}>CREATE ROOM</Button></Link>
+                
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">
@@ -67,8 +85,8 @@ export default function Page (){
                                     <td>{FormatVND(room.price.toString())}</td>
                                     <td>{room.minPeople} - {room.maxPeople} people</td>
                                     <td>
-                                        {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
-                                        <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
+                                        <Link href={"/host/room/edit/" + room.roomID} className="text-decoration-underline text-primary me-2"><Button variant="contained" color="primary" startIcon={<EditIcon />}>Edit</Button></Link>
+                                        <Button variant="contained" className="bg-dark" startIcon={<DeleteIcon />} onClick={()=>handleClickDeleteById(room.roomID.toString())}>Delete</Button>
                                     </td>
                                 </tr>
                             )) || (

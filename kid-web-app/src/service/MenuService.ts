@@ -27,7 +27,16 @@ export async function ApiCreateOrUpdateMenu(HostUserId: number,MenuName: string,
     return null
 }
 
-
+export async function ApiDeleteMenuByID(id: string){
+    const response = await fetch(Constant.API_MENU_ORIGIN + id, {
+        method:"DELETE"
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
 export async function ApiGetMenuByPartyID(partyId: number){
     const response = await fetch(Constant.API_GET_MENU_BY_PARTY_ID + partyId);
     if(response.ok){

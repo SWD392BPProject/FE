@@ -8,7 +8,11 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import { FormatVND, GetLabelOfPartyType } from "@/util/TextUtil";
 import PaginationBar from "@/component/PaginationBar";
-import { ApiGetMenuByHostIDPaging } from "@/service/MenuService";
+import { ApiDeleteMenuByID, ApiGetMenuByHostIDPaging } from "@/service/MenuService";
+import { Button } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
@@ -19,6 +23,19 @@ export default function Page (){
     React.useEffect(()=>{
         fetchMenuByHostIDPaging(1);
     },[]);
+
+    async function handleClickDeleteById(id: string){
+        const resultCf = confirm("Are you sure delete this menu?")
+        if(resultCf){
+            const result = await ApiDeleteMenuByID(id);
+            if(result && result.code == STATUS_CODE_OK){
+                alert("Delete menu successfully!");
+                fetchMenuByHostIDPaging(currentPage);
+            }else{
+                alert("Delete menu failed!");
+            }
+        }
+    }
 
     async function fetchMenuByHostIDPaging(page: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
@@ -42,7 +59,8 @@ export default function Page (){
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
                 <h1 className="fw-bold text-primary">MENU <span className="text-dark">MANAGEMENT</span></h1>
-                <Link href="/host/menu/create"><button className="btn btn-primary">+ ADD MENU</button></Link>
+                <Link href="/host/menu/create"><Button variant="contained" color="primary" startIcon={<AddIcon />}>CREATE MENU</Button></Link>
+
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">
@@ -66,9 +84,8 @@ export default function Page (){
                                     <td>{FormatVND(menu.price.toString())}</td>
                                     <td>{menu.description}</td>
                                     <td>
-                                        <Link href={"/host/menu/edit/" + menu.menuID} className="text-decoration-underline text-primary">Edit</Link>
-                                        {/* <Link href={"/admin/video-edit/" + video._id} className="me-3"><BorderColorIcon /></Link>
-                                        <DeleteIcon className="cursor-pointer text-danger" onClick={()=>handleDeleteClick(video._id, video.title)}/> */}
+                                        <Link href={"/host/menu/edit/" + menu.menuID} className="text-decoration-underline text-primary me-2"><Button variant="contained" color="primary" startIcon={<EditIcon />}>Edit</Button></Link>
+                                        <Button variant="contained" className="bg-dark" startIcon={<DeleteIcon />} onClick={()=>handleClickDeleteById(menu.menuID.toString())}>Delete</Button>
                                     </td>
                                 </tr>
                             )) || (

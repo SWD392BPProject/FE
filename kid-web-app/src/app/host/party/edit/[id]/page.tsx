@@ -6,37 +6,65 @@ import Link from "next/link";
 import * as ColorUtil from "@/common/ColorUtil";
 import AddIcon from '@mui/icons-material/Add';
 import * as Yup from 'yup';
-import { UserInfoCookie, Option, Menu } from "@/types";
+import { UserInfoCookie, Option, Menu, Party } from "@/types";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-import {PARTY_TYPE_LIST, STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constant";
+import {PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_ERROR, STATUS_CODE_OK, USER_COOKIE } from "@/common/Constant";
 import { ChangeEvent } from "react";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React from "react";
-import { ApiCreateParty } from "@/service/PartyService";
+import { ApiCreateParty, ApiGetPartyById } from "@/service/PartyService";
 import { ApiGetMenuByHostID, ApiGetMenuByPartyID } from "@/service/MenuService";
 import { RemoveDuplicateString } from "@/util/TextUtil";
 
-export default function Page (){
+type Params = {
+    params: {
+        id: number;
+    }
+}
+
+export default function Page ({ params } : Params){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const router = useRouter()
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [thumbnailImage, setThumbnailImage] = React.useState<File | null>(null);
+    const [thumbnailLink, setThumbnailLink] = React.useState<string | null>(null);
     const [thumbnailImageSrc, setThumbnailImageSrc] = React.useState<string | undefined>(undefined);
     const [optionMenu,setOptionMenu] = React.useState<Option[] | null>(null);
     const [listMenu, setListMenu] = React.useState<string[] | null>(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [optionMenuSelected,setOptionMenuSelected] = React.useState<Option[] | null>(null);
+    const [party, setParty] = React.useState<Party | null>(null);
+    const [optionDefaultSelected,setOptionDefaultSelected] = React.useState<Option[] | null>(null);
 
     React.useEffect(()=>{
-        fetchGetMenuByHostId();
+        fetchPartyByID(params.id);
     }, []);
 
-    async function fetchGetMenuByHostId(){
+    async function fetchPartyByID(id: number){
+        const result = await ApiGetPartyById(id);
+        if(result && result.code == STATUS_CODE_OK){
+            const partyData = result.data as Party;
+            setParty(partyData);
+            setThumbnailLink(partyData.image);
+            fetchMenuByPartyID(partyData.partyID, partyData);
+        }
+    }
+
+    async function fetchMenuByPartyID(id: number, partyData: Party){
+        const result = await ApiGetMenuByPartyID(id);
+        if(result && result.code == STATUS_CODE_OK){
+            fetchGetMenuByHostId(result.data);
+        }
+    }
+
+    async function fetchGetMenuByHostId(menuSeleced: Menu[]){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
             const result = await ApiGetMenuByHostID(userInfoCookie.userID);
             const arrayOptions = [] as Option[];
+            const arrayOptionsDefault = [] as Option[];
+            const listMenuString = [] as string[];
             const firstValue = [] as string[];
             if(result && result.code == STATUS_CODE_OK){
                 const arrayMenu = result.data as Menu[];
@@ -49,9 +77,18 @@ export default function Page (){
                         value: arrayMenu[i].menuID.toString(),
                         label: arrayMenu[i].menuName,
                     } as Option;
+                    for(let j = 0; j < menuSeleced.length; j++){
+                        if(menuSeleced[j].menuID.toString() == item.value){
+                            arrayOptionsDefault.push(item);
+                            listMenuString.push(item.value);
+                            break;
+                        }
+                    }
                     arrayOptions.push(item);
                 }
+                setListMenu(listMenuString);
                 setOptionMenu(arrayOptions);
+                setOptionDefaultSelected(arrayOptionsDefault);
                 if(arrayOptions.length > 0){
                     setOptionMenuSelected([arrayOptions[0]]);
                 }
@@ -78,13 +115,13 @@ export default function Page (){
     const handleSubmitParty = async (values : PartyFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            var result = await ApiCreateParty(userInfoCookie.userID,values.PartyName, values.Address, values.Type, values.Description, RemoveDuplicateString(listMenu??[]), thumbnailImage, userInfoCookie.token);
+            var result = await ApiCreateParty(userInfoCookie.userID,values.PartyName, values.Address, values.Type, values.Description, RemoveDuplicateString(listMenu??[]), thumbnailImage, userInfoCookie.token, party?.partyID.toString());
             if(result?.code==STATUS_CODE_OK){
-                alert("Create party successfully!");
+                alert("Edit party successfully!");
             }else if(result?.code==STATUS_CODE_ERROR){
                 alert(result?.message);
             }else{
-                alert("Create party failed!");
+                alert("Edit party failed!");
             }
         }
     }
@@ -107,15 +144,15 @@ export default function Page (){
     return(
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
-                <h1 className="fw-bold text-primary">PARTY <span className="text-dark">CREATE</span></h1>
-                {isLoaded && (
+                <h1 className="fw-bold text-primary">PARTY <span className="text-dark">EDIT</span></h1>
+                {isLoaded && party && (
                     <Formik 
                         initialValues={{
-                            PartyName: 'Tiệc sinh nhật LUXURY',
-                            Address: 'Hồ Chí Minh',
-                            Type: PARTY_TYPE_LIST[0].value,
-                            MenuList: (optionMenuSelected && optionMenuSelected.length > 1) && optionMenuSelected[0].value || 0,
-                            Description: "Một sinh nhật thật ý nghĩa và đặc biệt để đánh dấu cột mốc quan trọng của các thiên thần nhỏ luôn là điều bố mẹ băn khoăn? Với sự đa dạng trong các gói tiệc sinh nhật, tiNi hứa hẹn sẽ mang đến cho các thiên thần nhỏ một bữa tiệc đầy bất ngờ và tràn ngập những khoảnh khắc đáng nhớ.",
+                            PartyName: party.partyName,
+                            Address:  party.address,
+                            Type: party.type,
+                            MenuList: 0,
+                            Description: party.description,
                         }}
                         validationSchema={PartyValidateSchema}
                         onSubmit={values=>handleSubmitParty(values)}>
@@ -148,7 +185,7 @@ export default function Page (){
                                         </div>
                                         <div className="form-group mt-2">
                                             <label htmlFor="MenuList" className="form-label fw-bold">Menu List: </label>
-                                            {optionMenu && (
+                                            {optionMenu && optionDefaultSelected && (
                                                 <Autocomplete
                                                     multiple
                                                     className="bg-light"
@@ -156,7 +193,7 @@ export default function Page (){
                                                     options={optionMenu}
                                                     getOptionLabel={(option) => option && option.label}
                                                     onChange={handleChangeMenu}
-                                                    defaultValue={[optionMenu[0]]}
+                                                    defaultValue={optionDefaultSelected}
                                                     filterSelectedOptions
                                                     renderInput={(params) => (
                                                     <TextField
@@ -182,6 +219,10 @@ export default function Page (){
                                                 <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
                                                     <Image alt={""} width={600} height={600} src={thumbnailImageSrc} className="border-radius-black image-fit w-100"  style={{maxHeight:445}} />
                                                 </div>
+                                            )|| thumbnailLink && (
+                                                <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
+                                                    <Image alt={""} width={600} height={600} src={PUBLIC_IMAGE_UPLOAD + thumbnailLink} className="border-radius-black image-fit w-100"  style={{maxHeight:445}} />
+                                                </div>
                                             ) || (
                                                 <div className="d-flex justify-content-center align-items-center w-100 border-radius-black h-100" style={{maxHeight:445}} onClick={handleAddPhotoClick}>
                                                     <AddAPhotoIcon style={{fontSize:56}} />
@@ -196,7 +237,7 @@ export default function Page (){
                                 
                                 <div className="mt-4">
                                     <Button type="submit" variant="contained" startIcon={<AddIcon />} color="primary">
-                                        Register
+                                        Save
                                     </Button>
                                     <Link href="/host/party" className="ms-2">
                                         <ThemeProvider theme={ColorUtil.ColorGray}>

@@ -18,7 +18,8 @@ export async function ApiCreateRoom(
         SlotEnd3: string, 
         SlotEnd4: string, 
         Image: File | null, 
-        token: string
+        token: string,
+        RoomID?: string,
     ){
     var data = new FormData();    
     data.append("HostUserID", HostUserID.toString());
@@ -34,6 +35,9 @@ export async function ApiCreateRoom(
     data.append("SlotEnd2", SlotEnd2);
     data.append("SlotEnd3", SlotEnd3);
     data.append("SlotEnd4", SlotEnd4);
+    if(RoomID){
+        data.append("RoomID", RoomID);
+    }
     Type.forEach((typeValue, index) => {
         data.append(`Type[${index}]`, typeValue);
     });
@@ -42,7 +46,7 @@ export async function ApiCreateRoom(
         data.append("Image", Image);
     }
     const response = await fetch(Constant.API_CREATE_ROOM, {
-        method: "POST",
+        method: RoomID?"PUT":"POST",
         body: data,
         headers: {
             [Constant.HEADER_TOKEN] : token
@@ -54,7 +58,16 @@ export async function ApiCreateRoom(
     }
     return null
 }
-
+export async function ApiDeleteRoomByID(id: string){
+    const response = await fetch(Constant.API_ROOM_ORIGIN + id, {
+        method:"DELETE"
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
 export async function ApiGetLatestRoom(page: number,size: number, hostId: number){
     const response = await fetch(Constant.API_GET_LATEST_ROOM + page + "/" + size + "/" + hostId);
     if(response.ok){
