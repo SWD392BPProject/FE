@@ -29,18 +29,11 @@ export default function Page({ params } : Params){
 
     const handleClickBuyNow = async () => {
         if(booking){
-            const result = await ApiPaymentMomo((booking.paymentAmount / 1000).toString(), booking.partyName, booking.bookingID.toString()) as MomoReponse;
+            const result = await ApiPaymentMomo((booking.paymentAmount / 1000).toString(), booking.partyName, "BOOKING_"+booking.bookingID.toString()) as MomoReponse;
             if(result){
                 router.push(result.payUrl);
             }
         }
-        // const result = await ApiChangeBookingStatus(booking?.bookingID??0, BOOKING_STATUS_PAID);
-        // if(result && result.code == STATUS_CODE_OK){
-        //     alert("Payment successfully!");
-        // }
-        // else{
-        //     alert("Payment failed!");
-        // }
     }
 
     return (

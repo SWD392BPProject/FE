@@ -229,3 +229,8 @@ a {
   height: 15px !important;
   transition: opacity 1s ease !important;
 }
+
+.voucher-hover:hover{
+  cursor: pointer;
+  background-color: rgb(144, 194, 255);
+}

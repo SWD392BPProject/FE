@@ -12,6 +12,7 @@ import { ApiChangeBookingStatus, ApiGetBookingByUserID } from "@/service/Booking
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ErrorIcon from '@mui/icons-material/Error';
+import { ApiChangePackageOrderStatus } from "@/service/PackageService";
 export default function Page (){
     const router = useRouter();
     const pathname = usePathname()
@@ -29,18 +30,22 @@ export default function Page (){
         };
 
         if(resultCode == "0"){
-            fetchChagneStatusBooking(orderId??'0');
+            fetchChagneStatus(orderId??'0');
         }
 
         redirectAfterSeconds(3);
     }, [router]);
 
-    async function fetchChagneStatusBooking(orderId: string){
+    async function fetchChagneStatus(orderId: string){
         var split = orderId.split("_");
-        var id = split[0];
-        const result = await ApiChangeBookingStatus(id, BOOKING_STATUS_PAID);
+        var id = split[1];
+        if(split[0]=="BOOKING"){
+            const result = await ApiChangeBookingStatus(id, BOOKING_STATUS_PAID);
+        }else {
+            const result = await ApiChangePackageOrderStatus(id, BOOKING_STATUS_PAID);
+        }
     }
-    
+
 
     return(
         <div className="row d-flex justify-content-center bg-graylight">

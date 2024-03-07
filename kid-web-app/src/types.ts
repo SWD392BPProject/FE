@@ -68,12 +68,16 @@ export interface Booking {
 
 export interface PackageOrder{
     packageOrderID: number,
+    voucherID: number,
+    voucherCode: string,
+    voucherPrice: string,
     packageName: string,
     packageDescription: string,
     packagePrice: number,
     activeDays: number,
     paymentAmount: number,
     status: string,
+    createDate: string,
 }
 
 export interface MomoReponse {
@@ -128,3 +132,14 @@ export type Option = {
     value: string,
     label: string
 }
+
+export type Voucher = {
+    voucherID: number,
+    voucherCode: string,
+    packageName: string,
+    discountAmount: number,
+    discountPercent: number,
+    expiryDate: string,
+    discountMax: number,
+}
+

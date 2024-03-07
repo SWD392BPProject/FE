@@ -86,6 +86,9 @@ export const API_GET_PACKAGE_ORDER_BY_ID = URL_BASE_API + "/Package/orderId/";
 export const API_CREATE_PACKAGE = URL_BASE_API + "/Package";
 export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";
 export const API_CREATE_PACKAGE_ORDER = URL_BASE_API + "/Package/createOrder";
+export const API_CHANGE_STATUS_PACKAGE_ORDER = URL_BASE_API + "/Package/changeStatus/";
+export const API_GET_PACKAGE_ORDER_BY_USER_ID = URL_BASE_API + "/Package/ordersByUserID/";
+
 
 /*
  ** BOOKING API
@@ -95,6 +98,11 @@ export const API_GET_BOOKING_BY_ID = URL_BASE_API + "/Booking/";
 export const API_GET_BOOKING_BY_USER_ID = URL_BASE_API + "/Booking/byUserID/";
 export const API_CHANGE_STATUS_BOOKING = URL_BASE_API + "/Booking/changeStatus/";
 
+/*
+ ** VOUCHER API
+*/
+export const API_GET_VOUCHER_BY_USER_ID = URL_BASE_API + "/Voucher/byUserID/";
+export const API_ADD_VOUCHER_TO_PACKAGE_ORDER = URL_BASE_API + "/Voucher/addVoucher";
 
 export const DESCRIPTION_SHORT_LENGTH = 200;
 export const TITLE_SHORT_LENGTH = 38;

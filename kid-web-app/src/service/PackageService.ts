@@ -80,3 +80,21 @@ export async function ApiGetPackageOrderByID(id: number){
     }
     return null;
 }
+
+export async function ApiChangePackageOrderStatus(packageOrderID: string, status: string){
+    const response = await fetch(Constant.API_CHANGE_STATUS_PACKAGE_ORDER + packageOrderID + "/" + status);
+    if(response.ok){ 
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+export async function ApiGetPackageOrderByUserID(page:number, size:number ,userID: number){
+    const response = await fetch(Constant.API_GET_PACKAGE_ORDER_BY_USER_ID + userID + "/" + page + "/" + size);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}

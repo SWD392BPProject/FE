@@ -126,7 +126,6 @@ export default function Page({ params } : Params){
         setDateString(values.DateBooking);
         setSlotTime(values.BookingTime);
         await setPeople(values.People.toString());
-        alert(values.People.toString());
         if(party && party.partyID){
             await fetchAllRoomForRent(1, party.partyID);
             setCurrentPage(1);

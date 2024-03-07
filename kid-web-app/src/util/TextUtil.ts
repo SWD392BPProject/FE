@@ -52,6 +52,19 @@ export const GetDescriptionTextShort = (value: string) => {
     return value;
 }
 
+export const GetDateRemaining = (value: string) => {
+     const targetDate = new Date(value);
+     const currentDate = new Date();
+     
+     // Calculate the difference in milliseconds
+     const differenceMs = targetDate.getTime() - currentDate.getTime();
+ 
+     // Convert milliseconds to days
+     const daysRemaining = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+ 
+     return daysRemaining;
+}
+
 export const GetDateFormat = (value: string) => {
     return value.slice(0,10);
 }
