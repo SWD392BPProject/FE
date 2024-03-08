@@ -2,13 +2,13 @@
 import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE, TABLE_ROOM_BOOKING_SIZE, USER_COOKIE } from "@/common/Constant";
 import { ApiGetPartyById } from "@/service/PartyService";
 import { Menu, Party, Room, Slot, UserInfoCookie } from "@/types";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Image from "next/image";
 import PlaceIcon from '@mui/icons-material/Place';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import { Field, Form, Formik, FormikValues } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import PaginationBar from "@/component/PaginationBar";
 import { useCookies } from "react-cookie";
 import { ApiGetLatestRoom, ApiGetRoomForRent } from "@/service/RoomService";
@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { ApiGetSlotByRoomID } from "@/service/SlotService";
+import { ApiGetSlotBookingByRoomID, ApiGetSlotByRoomID } from "@/service/SlotService";
 import { ApiGetMenuByPartyID } from "@/service/MenuService";
 import { ApiCreateBooking } from "@/service/BookingService";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -64,6 +64,7 @@ export default function Page({ params } : Params){
     const [SlotTime, setSlotTime] = React.useState(searchParams.get('SlotTime')??'');
     const [People, setPeople] = React.useState(searchParams.get('People')??'');
 
+    console.log(dateString);
     const currentDate = new Date();
     const tomorrowDate = new Date(currentDate);
     tomorrowDate.setDate(currentDate.getDate() + 1); // Thêm 1 ngày
@@ -97,6 +98,16 @@ export default function Page({ params } : Params){
         setRoomViewSlot(null);
     }
 
+    async function fetchGetSlotBookingByRoomID(id: number, dateBooking:string){
+        const result = await ApiGetSlotBookingByRoomID(id, dateBooking);
+        if(result && result.code == STATUS_CODE_OK){
+            setRoomViewSlot(result.data);
+            return result.data;
+        }
+        setRoomViewSlot(null);
+        return null;
+    }
+
     // async function fetchAllMenuInPartyId(id: number){
     //     const result = await ApiGetAllMenuInPartyId(id);
     //     if(result && result.code == STATUS_CODE_OK){
@@ -117,9 +128,21 @@ export default function Page({ params } : Params){
         setIsSearching(false);
     }
 
+    async function fetchAllRoomForRentParams(page: number, partyId: number, Type: string, dateString: string, People: string){
+        const result = await ApiGetRoomForRent(Type, dateString, SlotTime, People, page, TABLE_ROOM_BOOKING_SIZE, partyId);
+        if(result && result.code == STATUS_CODE_OK){
+            setRooms(result.data);
+            const totalPage = result.totalPage ?? 1;
+            setTotalPage(totalPage);
+            //window.scrollTo(0, 0);
+        }
+        setIsSearching(false);
+    }
+
     function handleSubmitSearch(values: { DateBooking: string; People: number; Type: string; BookingTime: string; }): any {
         router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}&SlotTime=${values.BookingTime}`);
     }
+
     async function handleSubmitSearchRoomForRent(values: SearchFormValues) {
         setIsSearching(true);
         setType(values.Type);
@@ -127,7 +150,7 @@ export default function Page({ params } : Params){
         setSlotTime(values.BookingTime);
         await setPeople(values.People.toString());
         if(party && party.partyID){
-            await fetchAllRoomForRent(1, party.partyID);
+            await fetchAllRoomForRentParams(1, party.partyID, values.Type, values.DateBooking, values.People.toString());
             setCurrentPage(1);
         }
         
@@ -159,8 +182,14 @@ export default function Page({ params } : Params){
 
     const handleClickViewRoom = async (room: Room) => {
         setRoomView(room);
-        await fetchGetSlotByRoomID(room.roomID);
-        setSelectedIndex(0);
+        //await fetchGetSlotByRoomID(room.roomID);
+        const slots = await fetchGetSlotBookingByRoomID(room.roomID,dateString) as Slot[];
+        for(let i = 0; i < slots.length; i++){
+            if(!slots[i].used){
+                setSelectedIndex(i);
+                break;
+            }
+        }
         handleOpen();
     }
 
@@ -171,6 +200,19 @@ export default function Page({ params } : Params){
     const handleRadioMenuChange = (selectedIndex: number) => {
         setSelectedMenuIndex(selectedIndex); 
     };
+
+    const handleDateChange = async (setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void,roomID: number,e: ChangeEvent<HTMLInputElement>) => {
+        const dateBookingSelect = e.target.value
+        const slots = await fetchGetSlotBookingByRoomID(roomID,dateBookingSelect) as Slot[];
+        for(let i = 0; i < slots.length; i++){
+            if(!slots[i].used){
+                setSelectedIndex(i);
+                break;
+            }
+        }
+        setFieldValue("BookingDate", dateBookingSelect);
+    };
+    
 
     return (
         <div className="row d-flex justify-content-center bg-white">
@@ -337,7 +379,7 @@ export default function Page({ params } : Params){
                     <Box sx={style}>
                         <Formik 
                             initialValues={{
-                                BookingDate: tomorrowDate.toISOString().split('T')[0],
+                                BookingDate: dateString && dateString != undefined?dateString:tomorrowDate.toISOString().split('T')[0],
                                 SlotBooking: roomViewSlot && roomViewSlot[0].slotID || 0,
                                 MenuBooking: menus && menus.length > 0 && menus[0].menuID || 0,
                                 DiningTable: 5
@@ -363,7 +405,7 @@ export default function Page({ params } : Params){
                                             <p><b>Price: </b><span>{FormatVND(roomView?.price + "")}</span></p>
                                             <div className="d-flex align-items-center" style={{marginTop:-8}}>
                                                 <span><b>Date: </b></span>
-                                                <Field type="date" className="ms-2 form-control w-50" name="BookingDate" />
+                                                <Field type="date" className="ms-2 form-control w-50" name="BookingDate" onChange={(e: ChangeEvent<HTMLInputElement>)=>handleDateChange(setFieldValue,roomView?.roomID??0,e)} />
                                             </div>
                                             <p className="mt-2"><b>Time serve:</b></p>
                                             <div role="group" aria-labelledby="my-radio-group">
@@ -377,8 +419,13 @@ export default function Page({ params } : Params){
                                                                 value={row.slotID} 
                                                                 checked={index === selectedIndex}
                                                                 onChange={() => handleRadioChange(index)}
+                                                                disabled={row.used}
                                                             /> 
-                                                            {TimeToString(row.startTime)}-{TimeToString(row.endTime)}
+                                                            {row && row.used && (
+                                                                <span className="text-danger">{TimeToString(row.startTime)}-{TimeToString(row.endTime)}</span>
+                                                            ) || (
+                                                                <span>{TimeToString(row.startTime)}-{TimeToString(row.endTime)}</span>
+                                                            )}
                                                         </label>
                                                     </div>
                                                 ))}

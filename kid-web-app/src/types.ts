@@ -97,6 +97,7 @@ export interface Slot {
     slotID: number,
     startTime: string,
     endTime: string,
+    used: boolean,
     roomID: number,
 }
 

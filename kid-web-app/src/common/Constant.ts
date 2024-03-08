@@ -67,6 +67,7 @@ export const API_GET_SEARCH_PARTY = URL_BASE_API + "/Party/SearchBooking/";
  ** SLOT API
 */
 export const API_GET_SLOT_BY_ROOM_ID = URL_BASE_API + "/Slot/byRoomID/";
+export const API_GET_SLOT_BOOKING_BY_ROOM_ID = URL_BASE_API + "/Slot/bookingByRoomID";
 
 /*
  ** ROOM API
