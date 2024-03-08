@@ -137,6 +137,18 @@ a {
 .h-90{
   height: 90%;
 }
+.top-10{
+  top:10px;
+}
+.left-10{
+  left:10px;
+}
+.right-10{
+  right:10px;
+}
+.bot-10{
+  bottom:10px;
+}
 .carousel-title{
   left: 0;
   bottom: 0;
@@ -233,4 +245,24 @@ a {
 .voucher-hover:hover{
   cursor: pointer;
   background-color: rgb(144, 194, 255);
+}
+
+.schedule-cell {
+  width: 165px;
+  height: 165px;
+  padding: 10px;
+  border: gainsboro solid 1px;
+  cursor: pointer;
+}
+
+.schedule-cell:hover {
+  background-color: rgb(144, 194, 255);
+}
+
+.radius-50 {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 2px;
 }

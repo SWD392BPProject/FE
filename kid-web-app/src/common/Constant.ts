@@ -70,6 +70,11 @@ export const API_FEEDBACK_ORIGIN = URL_BASE_API + "/Feedback/";
 export const API_GET_FEEDBACK_BY_USER_BOOKING_ID = URL_BASE_API + "/Feedback/byUserIDAndBooking/";
 
 /*
+ ** SCHEDULE API
+*/
+export const API_GET_SCHEDULE_BY_HOST_ID = URL_BASE_API + "/Schedule/byHostID/";
+
+/*
  ** SLOT API
 */
 export const API_GET_SLOT_BY_ROOM_ID = URL_BASE_API + "/Slot/byRoomID/";
@@ -104,6 +109,7 @@ export const API_CREATE_BOOKING = URL_BASE_API + "/Booking";
 export const API_GET_BOOKING_BY_ID = URL_BASE_API + "/Booking/";
 export const API_GET_BOOKING_BY_USER_ID = URL_BASE_API + "/Booking/byUserID/";
 export const API_CHANGE_STATUS_BOOKING = URL_BASE_API + "/Booking/changeStatus/";
+export const API_GET_BOOKING_BY_BOOKING_DATE = URL_BASE_API + "/Booking/byBookingDate/";
 
 /*
  ** VOUCHER API

@@ -117,6 +117,9 @@ export default function MenuBarHeader(){
                                             </>
                                         ) || isHostRoute && (
                                             <>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href="/host/schedule">Schedule</Link>
+                                                </li>
                                                <li className="nav-item">
                                                     <Link className="nav-link" href="/host/party">Party</Link>
                                                 </li>

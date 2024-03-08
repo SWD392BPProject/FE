@@ -88,6 +88,13 @@ export interface Feedback{
     comment: string,
 }
 
+export interface Schedule{
+    dateOfMonth: string,
+    day: string,
+    dayOfWeek: string,
+    amountParty: number,
+    isToday: boolean,
+}
 
 export interface MomoReponse {
     amount : number,

@@ -48,6 +48,15 @@ export async function ApiGetBookingByUserID(page:number, size:number ,userID: nu
     return null;
 }
 
+export async function ApiGetBookingByDate(hostId: number, bookingDate: string){
+    const response = await fetch(Constant.API_GET_BOOKING_BY_BOOKING_DATE + hostId + "/" + bookingDate);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
 export async function ApiChangeBookingStatus(bookingID: string, status: string){
     const response = await fetch(Constant.API_CHANGE_STATUS_BOOKING + bookingID + "/" + status);
     if(response.ok){ 
