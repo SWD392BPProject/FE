@@ -64,6 +64,12 @@ export const API_GET_PARTY_BY_ID = URL_BASE_API + "/Party/";
 export const API_GET_SEARCH_PARTY = URL_BASE_API + "/Party/SearchBooking/";
 
 /*
+ ** FEEDBACK API
+*/
+export const API_FEEDBACK_ORIGIN = URL_BASE_API + "/Feedback/";
+export const API_GET_FEEDBACK_BY_USER_BOOKING_ID = URL_BASE_API + "/Feedback/byUserIDAndBooking/";
+
+/*
  ** SLOT API
 */
 export const API_GET_SLOT_BY_ROOM_ID = URL_BASE_API + "/Slot/byRoomID/";

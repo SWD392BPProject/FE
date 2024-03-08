@@ -38,7 +38,6 @@ export const GetLabelOfPackageType = (value: number) => {
 }
 
 export const TimeToString = (value: string) => {
-    console.log(value);
     if(value.length>5){
         return value.slice(0,5);
     }

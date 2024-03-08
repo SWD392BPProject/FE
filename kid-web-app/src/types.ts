@@ -80,6 +80,15 @@ export interface PackageOrder{
     createDate: string,
 }
 
+export interface Feedback{
+    feedbackID: number,
+    userID: number,
+    bookingID: number,
+    rating: number,
+    comment: string,
+}
+
+
 export interface MomoReponse {
     amount : number,
     deeplink : string,

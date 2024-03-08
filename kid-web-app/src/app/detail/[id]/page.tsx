@@ -64,7 +64,6 @@ export default function Page({ params } : Params){
     const [SlotTime, setSlotTime] = React.useState(searchParams.get('SlotTime')??'');
     const [People, setPeople] = React.useState(searchParams.get('People')??'');
 
-    console.log(dateString);
     const currentDate = new Date();
     const tomorrowDate = new Date(currentDate);
     tomorrowDate.setDate(currentDate.getDate() + 1); // Thêm 1 ngày
