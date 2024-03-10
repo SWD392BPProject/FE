@@ -204,6 +204,11 @@ a {
 .border-r-gray-1 {
   border-right: #eeeeee solid 1px;
 }
+
+.border-gray {
+  border: lightgray solid 1px;
+}
+
 .border-radius-gray {
   border: lightgray solid 1px;
   border-radius: 10px;

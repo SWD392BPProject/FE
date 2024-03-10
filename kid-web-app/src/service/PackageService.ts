@@ -90,6 +90,15 @@ export async function ApiChangePackageOrderStatus(packageOrderID: string, status
     return null;
 }
 
+export async function ApiCheckBuyPackage(hostId: string){
+    const response = await fetch(Constant.API_CHECK_BUY_PACKAGE + hostId);
+    if(response.ok){ 
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
 export async function ApiGetPackageOrderByUserID(page:number, size:number ,userID: number){
     const response = await fetch(Constant.API_GET_PACKAGE_ORDER_BY_USER_ID + userID + "/" + page + "/" + size);
     if(response.ok){

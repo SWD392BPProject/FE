@@ -26,3 +26,12 @@ export async function ApiGetFeedbackByUserBookingID(UserID: number, BookingID: n
     }
     return null;
 }
+
+export async function ApiGetFeedbackByPartyID(PartyID: number){
+    const response = await fetch(Constant.API_GET_FEEDBACK_BY_PARTY_ID + PartyID);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}

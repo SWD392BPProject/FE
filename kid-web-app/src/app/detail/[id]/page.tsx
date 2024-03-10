@@ -1,7 +1,7 @@
 'use client';
-import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_OK, TABLE_DATA_SIZE, TABLE_ROOM_BOOKING_SIZE, USER_COOKIE } from "@/common/Constant";
+import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_ERROR, STATUS_CODE_OK, TABLE_DATA_SIZE, TABLE_ROOM_BOOKING_SIZE, USER_COOKIE } from "@/common/Constant";
 import { ApiGetPartyById } from "@/service/PartyService";
-import { Menu, Party, Room, Slot, UserInfoCookie } from "@/types";
+import { Feedback, Menu, Party, Room, Slot, UserInfoCookie } from "@/types";
 import React, { ChangeEvent } from "react";
 import Image from "next/image";
 import PlaceIcon from '@mui/icons-material/Place';
@@ -12,7 +12,7 @@ import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import PaginationBar from "@/component/PaginationBar";
 import { useCookies } from "react-cookie";
 import { ApiGetLatestRoom, ApiGetRoomForRent } from "@/service/RoomService";
-import { FormatVND, GetLabelOfPartyType, GetLabelOfPartyTypeArray, TimeToString } from "@/util/TextUtil";
+import { FormatVND, GetDateFormat, GetLabelOfPartyType, GetLabelOfPartyTypeArray, TimeToString } from "@/util/TextUtil";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -21,6 +21,8 @@ import { ApiGetSlotBookingByRoomID, ApiGetSlotByRoomID } from "@/service/SlotSer
 import { ApiGetMenuByPartyID } from "@/service/MenuService";
 import { ApiCreateBooking } from "@/service/BookingService";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ApiGetFeedbackByPartyID } from "@/service/FeedbackService";
+import { Rating } from "@mui/material";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,6 +46,7 @@ export default function Page({ params } : Params){
     const [menus, setMenus] = React.useState<Menu[] | null>(null);
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const [rooms, setRooms] = React.useState<Room[] | null>(null);
+    const [feedbacks, setFeedbacks] = React.useState<Feedback[] | null>(null);
     const [totalPage, setTotalPage] = React.useState(0);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [roomView, setRoomView] = React.useState<Room | null>(null);
@@ -70,6 +73,7 @@ export default function Page({ params } : Params){
 
     React.useEffect(()=>{
         fetchGetPartyById(params.id);
+        fetchFeedbackByPartyID(params.id);
     }, []);
 
     async function fetchGetPartyById(id: number){
@@ -78,13 +82,26 @@ export default function Page({ params } : Params){
             setParty(result.data);
             fetchAllRoomForRent(1, id);
             fetchMenuByPartyId(result.data.partyID);
+            return;
+        }else if(result && result.code == STATUS_CODE_ERROR){
+            alert(result.message);
+        }else{
+            alert("An error is occur. Unknown");
         }
+        router.push("/");
     }
 
     async function fetchMenuByPartyId(id: number){
         const result = await ApiGetMenuByPartyID(id);
         if(result && result.code == STATUS_CODE_OK){
             setMenus(result.data);
+        }
+    }
+
+    async function fetchFeedbackByPartyID(id: number){
+        const result = await ApiGetFeedbackByPartyID(id);
+        if(result && result.code == STATUS_CODE_OK){
+            setFeedbacks(result.data);
         }
     }
 
@@ -117,7 +134,11 @@ export default function Page({ params } : Params){
     // }
 
     async function fetchAllRoomForRent(page: number, partyId: number){
-        const result = await ApiGetRoomForRent(Type, dateString, SlotTime, People,page, TABLE_ROOM_BOOKING_SIZE, partyId);
+        var people = People;
+        if(People == "NaN"){
+            people = "";
+        }
+        const result = await ApiGetRoomForRent(Type, dateString, SlotTime, people, page, TABLE_ROOM_BOOKING_SIZE, partyId);
         if(result && result.code == STATUS_CODE_OK){
             setRooms(result.data);
             const totalPage = result.totalPage ?? 1;
@@ -127,7 +148,7 @@ export default function Page({ params } : Params){
         setIsSearching(false);
     }
 
-    async function fetchAllRoomForRentParams(page: number, partyId: number, Type: string, dateString: string, People: string){
+    async function fetchAllRoomForRentParams(page: number, partyId: number, Type: string, SlotTime: string, dateString: string, People: string){
         const result = await ApiGetRoomForRent(Type, dateString, SlotTime, People, page, TABLE_ROOM_BOOKING_SIZE, partyId);
         if(result && result.code == STATUS_CODE_OK){
             setRooms(result.data);
@@ -143,13 +164,17 @@ export default function Page({ params } : Params){
     }
 
     async function handleSubmitSearchRoomForRent(values: SearchFormValues) {
+        var people = values.People.toString();
+        if(values.People.toString() == "NaN"){
+            people = ""
+        }
         setIsSearching(true);
         setType(values.Type);
         setDateString(values.DateBooking);
         setSlotTime(values.BookingTime);
         await setPeople(values.People.toString());
         if(party && party.partyID){
-            await fetchAllRoomForRentParams(1, party.partyID, values.Type, values.DateBooking, values.People.toString());
+            await fetchAllRoomForRentParams(1, party.partyID, values.Type, values.BookingTime, values.DateBooking, people);
             setCurrentPage(1);
         }
         
@@ -296,7 +321,7 @@ export default function Page({ params } : Params){
                         {({ errors, setFieldValue, touched }) => (
                 <Form>
                 <div className="row">
-                    <div className="row">
+                    <div className="row m-0">
                         <div className="col-12 col-sm-12 col-md-10 row">
                             <div className="col-12 col-sm-12 col-md-4 form-group p-0 pt-2">
                                 <Field type="date" name="DateBooking" className="form-control" placeholder="Ngày book" />
@@ -319,7 +344,7 @@ export default function Page({ params } : Params){
 
                     {/* TABLE ROOM  */}
                     {/* <!-- TABLE --> */}
-                    <div className="row p-0 m-0 my-3">
+                    <div className="row m-0 mt-3">
                         <div className="col-12 col-sm-12 col-md-12 p-0 m-0">
                         <table className="table table-bordered table-hover">
                             <thead>
@@ -364,9 +389,31 @@ export default function Page({ params } : Params){
                 </div>
                 </Form>
                 )}
+
             </Formik>
-
-
+            {/* <!-- FEEBBACK --> */}
+            <h4>FEEDBACKS ({feedbacks && feedbacks.length || 0})</h4>
+            {feedbacks && feedbacks.map((row, index)=>(
+                    <div className="d-flex">
+                        <div>
+                            <Image alt={''} src={PUBLIC_IMAGE_UPLOAD + row.image} width={80} height={80} className="image-fit"/>
+                        </div>
+                        <div className="ps-3">
+                            <span style={{textAlign:'justify'}}>{row.comment}</span>
+                            <div>
+                                <Rating value={row.rating} disabled />
+                            </div>
+                            <div>
+                                {GetDateFormat(row.createDate)}
+                            </div>
+                        </div>
+                    </div>
+            ) || (
+                <div>
+                    <p>No data feedbacks</p>
+                </div>    
+            ))}
+            <div className="my-5"></div>
             {/* MODAL BOOKING  */}
             <div>
                 <Modal

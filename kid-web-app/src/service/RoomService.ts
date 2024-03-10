@@ -90,7 +90,9 @@ export async function ApiGetRoomForRent(Type: string, DateBooking: string, SlotT
     data.append("Type", Type);
     data.append("DateBooking", DateBooking);
     data.append("SlotTime", SlotTime);
-    data.append("People", People.toString());
+    if(People){
+        data.append("People", People.toString());
+    }
     const response = await fetch(Constant.API_GET_ROOM_FOR_RENT + page + "/" + size + "/" + partyId,{
         method: "POST",
         body: data

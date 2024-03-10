@@ -12,14 +12,17 @@ import { Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { ApiCheckBuyPackage } from "@/service/PackageService";
 
 export default function Page (){
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const [parties, setParties] = React.useState<Party[] | null>(null);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(0);
+    const [isBuyPackage, setIsBuyPackage] = React.useState(false);
     React.useEffect(()=>{
         fetchAllPartyByHostId(1);
+        fetchCheckBuyPackage();
     },[]);
 
     async function handleClickDeleteById(id: string){
@@ -31,6 +34,16 @@ export default function Page (){
                 fetchAllPartyByHostId(currentPage);
             }else{
                 alert("Delete party failed!");
+            }
+        }
+    }
+
+    async function fetchCheckBuyPackage(){
+        const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
+        if(userInfoCookie){
+            const result = await ApiCheckBuyPackage(userInfoCookie.userID.toString());
+            if(result && result.code == STATUS_CODE_OK){
+                setIsBuyPackage(result.data);
             }
         }
     }
@@ -57,8 +70,12 @@ export default function Page (){
         <div className="row d-flex justify-content-center bg-graylight">
             <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
                 <h1 className="fw-bold text-primary">PARTY <span className="text-dark">MANAGEMENT</span></h1>
+                {!isBuyPackage && (
+                    <div className="bg-warning text-white px-3 pt-4 pb-3 mb-2">
+                        <p className="fs-24">Notice: Let's buy any package so your party can be found on our website. <Link className="text-primary text-decoration-underline cursor-pointer" href={"/host/buy-package"}>Buy now</Link></p>
+                    </div>
+                )}
                 <Link href="/host/party/create"><Button variant="contained" color="primary" startIcon={<AddIcon />}>CREATE PARTY</Button></Link>
-
                 {/* <!-- TABLE --> */}
                 <div className="row p-0 m-0 my-3">
                     <div className="col-12 col-sm-12 col-md-12 p-0 m-0">

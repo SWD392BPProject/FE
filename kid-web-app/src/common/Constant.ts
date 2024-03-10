@@ -61,12 +61,14 @@ export const API_CREATE_PARTY = URL_BASE_API + "/Party";
 export const API_GET_LATEST_PARTY = URL_BASE_API + "/Party/";
 export const API_GET_TOP_MONTH_PARTY = URL_BASE_API + "/Party/TopMonth/";
 export const API_GET_PARTY_BY_ID = URL_BASE_API + "/Party/";
+export const API_GET_PARTY_BY_ID_IN_HOST = URL_BASE_API + "/Party/host/";
 export const API_GET_SEARCH_PARTY = URL_BASE_API + "/Party/SearchBooking/";
 
 /*
  ** FEEDBACK API
 */
 export const API_FEEDBACK_ORIGIN = URL_BASE_API + "/Feedback/";
+export const API_GET_FEEDBACK_BY_PARTY_ID = URL_BASE_API + "/Feedback/byPartyId/";
 export const API_GET_FEEDBACK_BY_USER_BOOKING_ID = URL_BASE_API + "/Feedback/byUserIDAndBooking/";
 
 /*
@@ -94,6 +96,7 @@ export const API_GET_ROOM_FOR_RENT = URL_BASE_API + "/Room/RoomForRent/";
  ** PACKAGE API
 */
 export const API_PACKAGE_ORIGIN = URL_BASE_API + "/Package/";
+export const API_CHECK_BUY_PACKAGE = URL_BASE_API + "/Package/checkPackage/";
 export const API_GET_PACKAGE_ORDER_BY_ID = URL_BASE_API + "/Package/orderId/";
 export const API_CREATE_PACKAGE = URL_BASE_API + "/Package";
 export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";

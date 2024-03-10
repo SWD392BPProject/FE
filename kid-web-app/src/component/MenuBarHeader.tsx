@@ -1,5 +1,5 @@
 'use client'
-import { ROLE_ADMIN, ROLE_HOST, USER_COOKIE } from "@/common/Constant";
+import { PARTY_TYPE_LIST, ROLE_ADMIN, ROLE_HOST, USER_COOKIE } from "@/common/Constant";
 import { UserInfoCookie } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -135,19 +135,26 @@ export default function MenuBarHeader(){
                                             </>
                                         ) ||(
                                             <>
-                                                <li className="nav-item">
-                                                    <a className="nav-link" href="#">Store</a>
-                                                </li>
+                                               
                                                 <li className="nav-item dropdown">
-                                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">My account</a>
+                                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Account</a>
                                                     <ul className="dropdown-menu">
                                                         <li><Link className="dropdown-item" href="/profile">Profile</Link></li>
                                                         <li><Link className="dropdown-item" href="/orders">Orders</Link></li>
                                                     </ul>
                                                 </li>
                                                 <li className="nav-item">
-                                                    <a className="nav-link" href="#">Mỹ phẩm thiên nhiên</a>
-                                                </li>  
+                                                    <Link className="nav-link" href={`/search?Type=${PARTY_TYPE_LIST[0].value}`}>Birthday</Link>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href={`/search?Type=${PARTY_TYPE_LIST[1].value}`}>Meeting</Link>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href={`/search?Type=${PARTY_TYPE_LIST[2].value}`}>Junket</Link>
+                                                </li>
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href={`/search?Type=${PARTY_TYPE_LIST[3].value}`}>Outdoor</Link>
+                                                </li>
                                             </>
                                         )}
                                         

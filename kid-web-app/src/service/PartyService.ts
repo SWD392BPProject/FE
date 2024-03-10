@@ -73,6 +73,15 @@ export async function ApiGetPartyById(id: number){
     return null;
 }
 
+export async function ApiGetPartyByIdInHost(id: number){
+    const response = await fetch(Constant.API_GET_PARTY_BY_ID_IN_HOST + id);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
 export async function ApiGetPartiesSearch(Type: string, DateBooking: string, SlotTime :string, People: string, page: number, size: number){
     const data = new URLSearchParams();
     data.append("Type", Type);

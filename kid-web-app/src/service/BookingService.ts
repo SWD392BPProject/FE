@@ -67,6 +67,11 @@ export async function ApiChangeBookingStatus(bookingID: string, status: string){
 }
 
 export async function ApiPaymentMomo(amount: string, title: string, orderId: string){
+    var amountInt = parseInt(amount);
+    var finalAmount = amountInt;
+    if(amountInt < 1000){
+        finalAmount = amountInt * 10;
+    }
     try {
         const response = await fetch('/api/momo-payment', {
             method: 'POST',
@@ -74,7 +79,7 @@ export async function ApiPaymentMomo(amount: string, title: string, orderId: str
             'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                amount,
+                amount : finalAmount,
                 title,
                 orderId
             // Thêm các thông tin cần thiết cho yêu cầu API của bạn

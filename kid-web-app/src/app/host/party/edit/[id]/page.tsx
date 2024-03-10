@@ -13,7 +13,7 @@ import {PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_ERROR, STATUS_CODE_OK,
 import { ChangeEvent } from "react";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React from "react";
-import { ApiCreateParty, ApiGetPartyById } from "@/service/PartyService";
+import { ApiCreateParty, ApiGetPartyById, ApiGetPartyByIdInHost } from "@/service/PartyService";
 import { ApiGetMenuByHostID, ApiGetMenuByPartyID } from "@/service/MenuService";
 import { RemoveDuplicateString } from "@/util/TextUtil";
 
@@ -42,7 +42,7 @@ export default function Page ({ params } : Params){
     }, []);
 
     async function fetchPartyByID(id: number){
-        const result = await ApiGetPartyById(id);
+        const result = await ApiGetPartyByIdInHost(id);
         if(result && result.code == STATUS_CODE_OK){
             const partyData = result.data as Party;
             setParty(partyData);
