@@ -70,6 +70,7 @@ export const API_GET_PARTY_BY_ID = URL_BASE_API + "/Party/";
 export const API_GET_PARTY_BY_ID_IN_HOST = URL_BASE_API + "/Party/host/";
 export const API_GET_SEARCH_PARTY = URL_BASE_API + "/Party/searchBooking/";
 export const API_GET_SEARCH_NAME_PARTY = URL_BASE_API + "/Party/searchName";
+export const API_UPDATE_VIEWED = URL_BASE_API + "/Party/updateViewed/";
 
 /*
  ** FEEDBACK API

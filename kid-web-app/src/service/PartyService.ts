@@ -115,6 +115,17 @@ export async function ApiGetPartiesSearchName(PartyName: string, Page: number, S
     return null;
 }
 
+export async function ApiUpdateViewed(id: number){
+    const response = await fetch(Constant.API_UPDATE_VIEWED + id);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+
+
 
 
 

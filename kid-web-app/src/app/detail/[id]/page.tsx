@@ -1,6 +1,6 @@
 'use client';
 import { PARTY_TYPE_LIST, PUBLIC_IMAGE_UPLOAD, STATUS_CODE_ERROR, STATUS_CODE_OK, TABLE_DATA_SIZE, TABLE_ROOM_BOOKING_SIZE, USER_COOKIE } from "@/common/Constant";
-import { ApiGetPartyById } from "@/service/PartyService";
+import { ApiGetPartyById, ApiUpdateViewed } from "@/service/PartyService";
 import { Feedback, Menu, Party, Room, Slot, UserInfoCookie } from "@/types";
 import React, { ChangeEvent } from "react";
 import Image from "next/image";
@@ -74,6 +74,7 @@ export default function Page({ params } : Params){
     React.useEffect(()=>{
         fetchGetPartyById(params.id);
         fetchFeedbackByPartyID(params.id);
+        ApiUpdateViewed(params.id);
     }, []);
 
     async function fetchGetPartyById(id: number){
