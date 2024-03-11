@@ -1,11 +1,15 @@
 'use client'
-import { PARTY_TYPE_LIST, ROLE_ADMIN, ROLE_HOST, USER_COOKIE } from "@/common/Constant";
+import { PARTY_TYPE_LIST, ROLE_ADMIN, ROLE_HOST, STATUS_CODE_OK, TABLE_DATA_SIZE, USER_COOKIE } from "@/common/Constant";
 import { UserInfoCookie } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { useCookies } from "react-cookie";
+import { Field, Form, Formik } from "formik";
+import * as Yup from 'yup';
+import { ApiGetPartiesSearchName } from "@/service/PartyService";
+import { useRouter } from "next/navigation";
 export default function MenuBarHeader(){
     const pathname = usePathname()
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
@@ -13,6 +17,7 @@ export default function MenuBarHeader(){
     const [isHostManager, setIsHostManager] = React.useState(false);
     const [isAdminManager, setIsAdminManager] = React.useState(false);
     const [email, setEmail] = React.useState("");
+    const router = useRouter();
     const [isAdminRoute, setIsAdminRoute] = React.useState<boolean>(
         pathname.startsWith('/admin/')
     );
@@ -59,6 +64,10 @@ export default function MenuBarHeader(){
         CheckRole();
     },[cookieUser]);
 
+    const handleSubmitSearchParty = async (values : SearchFormValues) => {
+        router.push(`/search?SearchName=${values.PartyName}&TypeSearch=1`);
+    }
+
     return(
         <div className="bg-white">
             {/* // <!-- TOP HEADER --> */}
@@ -76,10 +85,20 @@ export default function MenuBarHeader(){
                         <Image alt={""} src="/img/LOGO.png" width={150} height={120}/>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-7">
-                        <div className="form-group d-flex align-items-center h-100 w-100">
-                            <input className="form-control" placeholder="Tìm kiếm" />
-                            <button className="btn btn-primary">Seach</button>
-                        </div>
+                        <Formik 
+                            initialValues={{
+                                PartyName: '',
+                            }}
+                            onSubmit={values=>handleSubmitSearchParty(values)}>
+                                {({ errors, setFieldValue, touched }) => (
+                            <Form className="h-100">
+                                <div className="form-group d-flex align-items-center h-100 w-100">
+                                    <Field name="PartyName" className="form-control" placeholder="Tìm kiếm" />
+                                    <button type="submit" className="btn btn-primary">Seach</button>
+                                </div>
+                            </Form>
+                            )}
+                        </Formik>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-3 d-flex align-items-center justify-content-end">
                         <Link href={"/login"}><span className="text-primary cursor-pointer">{isLogged?"Logout":"Login"}</span></Link>
@@ -109,10 +128,13 @@ export default function MenuBarHeader(){
                                         {isAdminRoute && (
                                             <>
                                                <li className="nav-item">
-                                                    <a className="nav-link" href="/admin/dashboard">Dashboard</a>
+                                                    <Link className="nav-link" href="/admin/dashboard">Dashboard</Link>
                                                 </li> 
                                                 <li className="nav-item">
-                                                    <a className="nav-link" href="/admin/package">Package</a>
+                                                    <Link className="nav-link" href="/admin/package">Package</Link>
+                                                </li> 
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href="/admin/users">Users</Link>
                                                 </li> 
                                             </>
                                         ) || isHostRoute && (
@@ -176,4 +198,7 @@ export default function MenuBarHeader(){
             </div>
         </div>
     );
+}
+interface SearchFormValues {
+    PartyName: string;
 }

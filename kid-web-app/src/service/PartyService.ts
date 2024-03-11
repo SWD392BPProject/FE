@@ -99,4 +99,22 @@ export async function ApiGetPartiesSearch(Type: string, DateBooking: string, Slo
     return null;
 }
 
+export async function ApiGetPartiesSearchName(PartyName: string, Page: number, Size: number){
+    const data = new URLSearchParams();
+    data.append("PartyName", PartyName);
+    data.append("Page", Page.toString());
+    data.append("Size", Size.toString());
+    const response = await fetch(Constant.API_GET_SEARCH_NAME_PARTY,{
+        method: "POST",
+        body: data
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+
+
 

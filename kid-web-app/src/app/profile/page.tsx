@@ -54,7 +54,7 @@ export default function Page (){
     async function fetchUserByID(){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            const result = await ApiGetUserByID(userInfoCookie.userID);
+            const result = await ApiGetUserByID(userInfoCookie.userID.toString());
             if(result && result.code == STATUS_CODE_OK){
                 const userData = result.data as User;
                 setUser(userData);
@@ -66,7 +66,7 @@ export default function Page (){
     const handleSubmitUpdateInfo = async (values : UpdateUserFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            const result = await ApiUpdateUserByID(values.Email, values.FullName, values.PhoneNumber, thumbnailImage, userInfoCookie.userID.toString());
+            const result = await ApiUpdateUserByID(values.Email, values.FullName, values.PhoneNumber, thumbnailImage, userInfoCookie.userID.toString(), "");
             if(result && result.code == STATUS_CODE_OK){
                 alert("Update profile successfully");
             }else if(result && result.code == STATUS_CODE_ERROR){

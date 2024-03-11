@@ -36,7 +36,7 @@ export default function Home() {
 
 
   function handleSubmitSearch(values: { DateBooking: string; People: string; Type: string; }): any {
-    router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}`);
+    router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}&TypeSearch=0`);
   }
 
   return (<div>

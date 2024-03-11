@@ -160,7 +160,7 @@ export default function Page({ params } : Params){
     }
 
     function handleSubmitSearch(values: { DateBooking: string; People: number; Type: string; BookingTime: string; }): any {
-        router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}&SlotTime=${values.BookingTime}`);
+        router.push(`/search?DateBooking=${values.DateBooking}&People=${values.People}&Type=${values.Type}&SlotTime=${values.BookingTime}&TypeSearch=0`);
     }
 
     async function handleSubmitSearchRoomForRent(values: SearchFormValues) {

@@ -34,9 +34,11 @@ function Content() {
     const router = useRouter();
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies([USER_COOKIE])
     const [isNotSignout, setIsNotSighout] = React.useState(false);
-
+    const [isGGLoging, setIsGGLoging] = React.useState(false);
     React.useEffect(()=> {
-        rmCookie();
+        if(!isGGLoging){
+            rmCookie();
+        }
     }, [session]);
 
     async function rmCookie(){
@@ -45,7 +47,9 @@ function Content() {
             await removeCookieUser(USER_COOKIE, {path: "/"});
             await signOut();
         }else if(session && session.user){
-            await  callApiLoginGoogle(session.user.email??'', session.user.name??'');
+            setIsGGLoging(true);
+            await callApiLoginGoogle(session.user.email??'', session.user.name??'');
+            setIsGGLoging(false);
         }
     }
 

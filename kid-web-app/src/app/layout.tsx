@@ -24,7 +24,7 @@ export default function RootLayout({
         <MenuBarHeader />
 
         {/* CONTENT BODY */}
-        <div className="container-fluid" style={{minHeight: '60vh'}}>
+        <div className="container-fluid" style={{minHeight: '80vh'}}>
             {children}
         </div>
 
