@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import PaginationBar from "@/component/PaginationBar";
+import { Rating } from "@mui/material";
 export default function Page (){
     const [parties,setParties] = React.useState<Party[] | null>(null);
     const [isEmptyResult,setIsEmptyResult] = React.useState(false);
@@ -19,7 +20,7 @@ export default function Page (){
 
     //URL PARAMS
     const searchParams = useSearchParams()
-    const Type = searchParams.get('Type')??'';
+    const Type = searchParams.get('Type')??PARTY_TYPE_LIST[0].value;
     const dateString = searchParams.get('DateBooking')??'';
     const SlotTime = searchParams.get('SlotTime')??'';
     const People = searchParams.get('People')??'';
@@ -136,6 +137,9 @@ export default function Page (){
                                         <b className="ms-5">Create Date:</b> {GetDateFormat(row.createDate)}
                                     </div>
                                     <p style={{textAlign:'justify'}}>{GetDescriptionTextShort(row.description)}</p>
+                                    <div>
+                                        <Rating value={row.rating} disabled />
+                                    </div>
                                 </div>
                             </div>
                         ))}

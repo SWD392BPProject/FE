@@ -1,9 +1,10 @@
 import * as Constant from "@/common/Constant";
 import { JsonBody } from "@/types";
 
-export async function ApiCreateFeedback(UserID: number, BookingID: number, Rating: number, Comment: string){
+export async function ApiCreateFeedback(UserID: number, PartyID: number, BookingID: number, Rating: number, Comment: string){
     const data = new URLSearchParams();
     data.append("UserID", UserID.toString());
+    data.append("PartyID", PartyID.toString());
     data.append("BookingID", BookingID.toString());
     data.append("Rating", Rating.toString());
     data.append("Comment", Comment);

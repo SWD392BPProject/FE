@@ -281,3 +281,11 @@ a {
 .w-170 {
   width: 170px;
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 100%;
+}

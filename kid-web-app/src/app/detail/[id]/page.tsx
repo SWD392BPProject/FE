@@ -287,6 +287,9 @@ export default function Page({ params } : Params){
                         <h3 className="fw-bold">{party?.partyName}</h3>
                         <div className="d-flex align-items-center my-2">
                             <PlaceIcon className="text-primary"/> <b className="me-2">{party?.address}</b> - Vị trí hiển thị trên bản đồ
+                            <div className="ms-3">
+                                <Rating value={party?.rating??0} disabled />
+                            </div>
                             <div className="flex-grow-1"></div>
                             <div className="cursor-pointer d-flex align-items-center">
                                 <FavoriteBorderIcon className="text-primary" /> <b className="ms-2">LIKE</b>

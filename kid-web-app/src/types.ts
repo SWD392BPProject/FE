@@ -21,6 +21,7 @@ export interface User {
 export interface Party {
     partyID: number,
     monthViewed: number,
+    rating: number,
     partyName: string,
     address: string,
     type: string,
@@ -52,6 +53,7 @@ export interface Room {
 
 export interface Booking {
     bookingID: number,
+    partyID: number,
     partyName: string,
     fullName: string,
     phoneNumber: string,

@@ -45,6 +45,7 @@ export default function Page (){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [feedbackComment, setFeedbackComment] = React.useState('');
+    const [partyIdSelected, setPartyIdSelected] = React.useState(0);
 
     React.useEffect(()=>{
         CheckRole();
@@ -115,8 +116,9 @@ export default function Page (){
         }
     }
 
-    const handleClickFeedback = (bookingId: number) => {
+    const handleClickFeedback = (bookingId: number, partyID: number) => {
         fetchFeedbackByUserBookingID(bookingId);
+        setPartyIdSelected(partyID);
         setBookingIdSelected(bookingId);
         handleOpen();
     }
@@ -124,7 +126,7 @@ export default function Page (){
     const handleSubmitFeedback = async (values : FeedbackFormValues) => {
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            var result = await ApiCreateFeedback(userInfoCookie.userID,bookingIdSelected, rateValue, feedbackComment);
+            var result = await ApiCreateFeedback(userInfoCookie.userID, partyIdSelected,bookingIdSelected, rateValue, feedbackComment);
             if(result?.code==STATUS_CODE_OK){
                 alert("Send feedback successfully!");
                 handleClose()
@@ -181,7 +183,7 @@ export default function Page (){
                                     </td>
                                     <td>
                                         {booking.status == BOOKING_STATUS_DONE && (
-                                            <button className="btn btn-primary me-3" onClick={()=>handleClickFeedback(booking.bookingID)}>Feedback</button>
+                                            <button className="btn btn-primary me-3" onClick={()=>handleClickFeedback(booking.bookingID, booking.partyID)}>Feedback</button>
                                         ) }
                                         {booking.status == BOOKING_STATUS_CREATE && (
                                             <Link href={`/payment/${booking.bookingID}`}><button className="btn btn-warning">Pay now</button></Link>

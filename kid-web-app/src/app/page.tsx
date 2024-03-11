@@ -10,6 +10,7 @@ import { GetLabelOfPartyType } from "@/util/TextUtil";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Rating } from "@mui/material";
 
 export default function Home() {
   const [carouselParties, setCarouselParties] = React.useState<Party[] | null>(null);
@@ -196,7 +197,7 @@ export default function Home() {
         </div>
 
 
-        {/* <!-- PARTY MỚI NHẤT --> */}
+        {/* <!-- PARTY HOT TRONG THÁNG --> */}
         <div className="row d-flex justify-content-center bg-graylight">
           <div className="col-12 col-sm-12 col-md-9 my-2 pt-3">
               <span className="fs-24 my-3">TOP VIEWED IN MONTH</span>
@@ -204,7 +205,10 @@ export default function Home() {
                   {topMonthPaties && topMonthPaties.map((row, index)=>(
                     <Link href={"/detail/"+row.partyID} key={index} className="col-6 col-sm-6 col-md-3 text-hover-lightblue pt-3">
                         <Image alt={""} src={PUBLIC_IMAGE_UPLOAD + row.image} width={500} height={500} style={{width:'100%',height:200,borderRadius:15}}/>
-                        <span>{row.partyName}</span>
+                        <span className="ellipsis">{row.partyName}</span>
+                        <div>
+                            <Rating value={row.rating} disabled />
+                        </div>
                     </Link>
                   ))}
               </div>
