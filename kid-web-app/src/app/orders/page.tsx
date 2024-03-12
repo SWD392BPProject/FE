@@ -142,11 +142,8 @@ export default function Page (){
         setRateValue(newValue);
     }
 
-
-
     function handleChangeComment(setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void, e: React.ChangeEvent<HTMLInputElement>) {
         setFeedbackComment(e.currentTarget.value);
-        //setFieldValue("Comment", e.currentTarget.value);
     }
 
     return(

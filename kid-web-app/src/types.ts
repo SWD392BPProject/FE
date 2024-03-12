@@ -97,11 +97,14 @@ export interface PackageOrder{
 
 export interface Feedback{
     feedbackID: number,
+    feedbackReplyID: number,
     userID: number,
     image: string,
     bookingID: number,
     rating: number,
     comment: string,
+    replyComment: string,
+    type: string,
     createDate: string,
 }
 

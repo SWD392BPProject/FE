@@ -1,6 +1,22 @@
 import * as Constant from "@/common/Constant";
 import { JsonBody } from "@/types";
 
+export async function ApiCreateReply(UserID: number, FeedbackID: number, Comment: string){
+    const data = new URLSearchParams();
+    data.append("UserID", UserID.toString());
+    data.append("Comment", Comment);
+    data.append("FeedbackID", FeedbackID.toString());
+    const response = await fetch(Constant.API_CREATE_REPLY, {
+        method: "POST",
+        body: data
+    });
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
 export async function ApiCreateFeedback(UserID: number, PartyID: number, BookingID: number, Rating: number, Comment: string){
     const data = new URLSearchParams();
     data.append("UserID", UserID.toString());
@@ -27,6 +43,16 @@ export async function ApiGetFeedbackByUserBookingID(UserID: number, BookingID: n
     }
     return null;
 }
+
+export async function ApiGetFeedbackByReplyD(replyId: number){
+    const response = await fetch(Constant.API_GET_FEEDBACK_BY_REPLY_ID + replyId);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
 
 export async function ApiGetFeedbackByPartyID(PartyID: number){
     const response = await fetch(Constant.API_GET_FEEDBACK_BY_PARTY_ID + PartyID);

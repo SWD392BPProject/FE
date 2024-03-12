@@ -76,8 +76,11 @@ export const API_UPDATE_VIEWED = URL_BASE_API + "/Party/updateViewed/";
  ** FEEDBACK API
 */
 export const API_FEEDBACK_ORIGIN = URL_BASE_API + "/Feedback/";
+export const API_CREATE_REPLY = URL_BASE_API + "/Feedback/reply";
 export const API_GET_FEEDBACK_BY_PARTY_ID = URL_BASE_API + "/Feedback/byPartyId/";
 export const API_GET_FEEDBACK_BY_USER_BOOKING_ID = URL_BASE_API + "/Feedback/byUserIDAndBooking/";
+export const API_GET_FEEDBACK_BY_REPLY_ID = URL_BASE_API + "/Feedback/byReplyID/";
+
 
 /*
  ** SCHEDULE API
