@@ -15,7 +15,16 @@ export interface User {
     password: string,
     role: string,
     status: string,
+    revenue: number,
     token: string,
+}
+
+export interface Statistic {
+    statisticID: number,
+    month: number,
+    year: number,
+    amount: number,
+    type: string,
 }
 
 export interface Party {
@@ -73,6 +82,7 @@ export interface Booking {
 
 export interface PackageOrder{
     packageOrderID: number,
+    fullName: string,
     voucherID: number,
     voucherCode: string,
     voucherPrice: string,

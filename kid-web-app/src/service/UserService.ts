@@ -71,6 +71,16 @@ export async function ApiChangeUserStatus(userId: string, status: string){
     return null;
 }
 
+export async function ApiGetTopHostUser(size: number){
+    const response = await fetch(Constant.API_GET_TOP_HOST + size);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}
+
+
 export async function ApiChangePW(OldPassword: string, NewPassword: string, UserID: string){
     var data = new URLSearchParams();
     data.append("OldPassword", OldPassword);

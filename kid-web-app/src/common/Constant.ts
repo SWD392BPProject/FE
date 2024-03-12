@@ -47,7 +47,7 @@ export const API_REGISTER_USER = URL_BASE_API + "/User/register";
 export const API_LOGIN = URL_BASE_API + "/User/login";
 export const API_LOGIN_WITH_GOOLE = URL_BASE_API + "/User/loginWithGoogle";
 export const API_SEARCH_USER = URL_BASE_API + "/User/searchUser";
-
+export const API_GET_TOP_HOST = URL_BASE_API + "/User/topHostParty/";
 
 /*
  ** MENU API
@@ -111,6 +111,7 @@ export const API_GET_LATEST_PACKAGE = URL_BASE_API + "/Package/";
 export const API_CREATE_PACKAGE_ORDER = URL_BASE_API + "/Package/createOrder";
 export const API_CHANGE_STATUS_PACKAGE_ORDER = URL_BASE_API + "/Package/changeStatus/";
 export const API_GET_PACKAGE_ORDER_BY_USER_ID = URL_BASE_API + "/Package/ordersByUserID/";
+export const API_GET_PACKAGE_ORDER_BY_PAGING = URL_BASE_API + "/Package/packageOrder/";
 
 
 /*
@@ -127,6 +128,11 @@ export const API_GET_BOOKING_BY_BOOKING_DATE = URL_BASE_API + "/Booking/byBookin
 */
 export const API_GET_VOUCHER_BY_USER_ID = URL_BASE_API + "/Voucher/byUserID/";
 export const API_ADD_VOUCHER_TO_PACKAGE_ORDER = URL_BASE_API + "/Voucher/addVoucher";
+
+/*
+ ** STATISTIC API
+*/
+export const API_GET_LAST_4_MONTH_REVENUE = URL_BASE_API + "/Statistic/last4Month";
 
 export const DESCRIPTION_SHORT_LENGTH = 200;
 export const TITLE_SHORT_LENGTH = 38;

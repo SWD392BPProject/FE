@@ -107,3 +107,13 @@ export async function ApiGetPackageOrderByUserID(page:number, size:number ,userI
     }
     return null;
 }
+
+
+export async function ApiGetPackageOrderPaging(page:number, size:number){
+    const response = await fetch(Constant.API_GET_PACKAGE_ORDER_BY_PAGING + page + "/" + size);
+    if(response.ok){
+        const result = await response.json();
+        return result as JsonBody;
+    }
+    return null;
+}

@@ -136,6 +136,9 @@ export default function MenuBarHeader(){
                                                 <li className="nav-item">
                                                     <Link className="nav-link" href="/admin/users">Users</Link>
                                                 </li> 
+                                                <li className="nav-item">
+                                                    <Link className="nav-link" href="/admin/orders">Orders</Link>
+                                                </li> 
                                             </>
                                         ) || isHostRoute && (
                                             <>
