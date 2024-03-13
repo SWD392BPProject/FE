@@ -85,10 +85,10 @@ export default function Page({ params } : Params){
         ApiUpdateViewed(params.id);
     }, []);
 
-    function CheckRole(){
+    function CheckRole(hostUserID: number){
         const userInfoCookie = cookieUser.userInfoCookie as UserInfoCookie;
         if(userInfoCookie){
-            if(userInfoCookie.role == ROLE_HOST && party?.hostUserID == userInfoCookie.userID){
+            if(userInfoCookie.role == ROLE_HOST && hostUserID == userInfoCookie.userID){
                 setCanReply(true);
             } else if(userInfoCookie.role == ROLE_ADMIN){
                 setCanReply(true);
@@ -99,10 +99,11 @@ export default function Page({ params } : Params){
     async function fetchGetPartyById(id: number){
         const result = await ApiGetPartyById(id);
         if(result && result.code == STATUS_CODE_OK){
-            setParty(result.data);
+            const partyData = result.data as Party;
+            setParty(partyData);
             fetchAllRoomForRent(1, id);
-            fetchMenuByPartyId(result.data.partyID);
-            CheckRole();
+            fetchMenuByPartyId(partyData.partyID);
+            CheckRole(partyData.hostUserID);
             return;
         }else if(result && result.code == STATUS_CODE_ERROR){
             alert(result.message);
@@ -145,15 +146,6 @@ export default function Page({ params } : Params){
         return null;
     }
 
-    // async function fetchAllMenuInPartyId(id: number){
-    //     const result = await ApiGetAllMenuInPartyId(id);
-    //     if(result && result.code == STATUS_CODE_OK){
-    //         setRoomViewSlot(result.data);
-    //         return;
-    //     }
-    //     setRoomViewSlot(null);
-    // }
-
     async function fetchAllRoomForRent(page: number, partyId: number){
         var people = People;
         if(People == "NaN"){
@@ -164,7 +156,6 @@ export default function Page({ params } : Params){
             setRooms(result.data);
             const totalPage = result.totalPage ?? 1;
             setTotalPage(totalPage);
-            //window.scrollTo(0, 0);
         }
         setIsSearching(false);
     }
@@ -175,7 +166,6 @@ export default function Page({ params } : Params){
             setRooms(result.data);
             const totalPage = result.totalPage ?? 1;
             setTotalPage(totalPage);
-            //window.scrollTo(0, 0);
         }
         setIsSearching(false);
     }
@@ -227,7 +217,6 @@ export default function Page({ params } : Params){
 
     const handleClickViewRoom = async (room: Room) => {
         setRoomView(room);
-        //await fetchGetSlotByRoomID(room.roomID);
         const slots = await fetchGetSlotBookingByRoomID(room.roomID,dateString) as Slot[];
         for(let i = 0; i < slots.length; i++){
             if(!slots[i].used){
@@ -264,7 +253,8 @@ export default function Page({ params } : Params){
             var result = await ApiCreateReply(userInfoCookie.userID, feedbackSelected.feedbackID ,values.Comment);
             if(result?.code==STATUS_CODE_OK){
                 alert("Send reply successfully!");
-                handleClose()
+                handleCloseFeedback();
+                fetchFeedbackByPartyID(params.id);
             }else if(result?.code==STATUS_CODE_ERROR){
                 alert(result?.message);
             }else{

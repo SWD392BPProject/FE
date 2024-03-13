@@ -117,7 +117,7 @@ export default function Page (){
                     aria-describedby="modal-modal-description"
                     >
                     <Box sx={style}>
-                        <h4 className="text-center mb-5">PARTY PLAN (03/10/2024)</h4>
+                        <h4 className="text-center mb-5">PARTY PLAN ({GetDateFormat(bookings && bookings[0].bookingDate || '')})</h4>
                         { bookings && bookings.map((row, index)=>(
                             <div className="row mb-3 border-gray">
                                 <div className="col-3 p-0">

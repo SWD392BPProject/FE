@@ -102,34 +102,34 @@ export default function Home() {
                   <div className="carousel-inner py-5 m-0">
                       {carouselParties && carouselParties.length > 3 && (
                         <>
-                          <div className="carousel-item active position-relative">
+                          <Link className="carousel-item active position-relative" href={`/detail/${carouselParties[0].partyID}`}>
                             <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[0].image} alt={carouselParties[0].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
                             <div className="position-absolute carousel-title w-100">
                                 <h3 className="text-white">{carouselParties[0].partyName}</h3>
                                 <h5 className="text-white">{carouselParties[0].address} - {GetLabelOfPartyType(carouselParties[0].type)}</h5>
                             </div>
-                          </div>
-                          <div className="carousel-item position-relative">
+                          </Link>
+                          <Link className="carousel-item position-relative" href={`/detail/${carouselParties[1].partyID}`}>
                             <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[1].image} alt={carouselParties[1].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
                             <div className="position-absolute carousel-title w-100">
                                 <h3 className="text-white">{carouselParties[1].partyName}</h3>
                                 <h5 className="text-white">{carouselParties[1].address} - {GetLabelOfPartyType(carouselParties[1].type)}</h5>
                             </div>
-                          </div>
-                          <div className="carousel-item position-relative">
+                          </Link>
+                          <Link className="carousel-item position-relative" href={`/detail/${carouselParties[2].partyID}`}>
                             <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[2].image} alt={carouselParties[2].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
                             <div className="position-absolute carousel-title w-100">
                                 <h3 className="text-white">{carouselParties[2].partyName}</h3>
                                 <h5 className="text-white">{carouselParties[2].address} - {GetLabelOfPartyType(carouselParties[2].type)}</h5>
                             </div>
-                          </div>
-                          <div className="carousel-item position-relative">
+                          </Link>
+                          <Link className="carousel-item position-relative" href={`/detail/${carouselParties[3].partyID}`}>
                             <Image src={PUBLIC_IMAGE_UPLOAD + carouselParties[3].image} alt={carouselParties[3].partyName} width={1000} height={1000} className="image-fit" style={{width:'100%', height: 400}} /> 
                             <div className="position-absolute carousel-title w-100">
                                 <h3 className="text-white">{carouselParties[3].partyName}</h3>
                                 <h5 className="text-white">{carouselParties[3].address} - {GetLabelOfPartyType(carouselParties[3].type)}</h5>
                             </div>
-                          </div>
+                          </Link>
                         </>
                       )}
                   </div>

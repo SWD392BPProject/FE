@@ -51,7 +51,7 @@ export default function Page({ params } : Params){
                         <b className="me-2">Booking Date: </b> {GetDateFormat(booking?.bookingDate??'')}
                     </div>
                     <div className="border-tbl-gray-nl p-3 w-50">
-                        <b className="me-2">Booking Time: </b> {TimeToString(booking?.slotTimeStart??'')}-{TimeToString(booking?.slotTimeStart??'')}
+                        <b className="me-2">Booking Time: </b> {TimeToString(booking?.slotTimeStart??'')}-{TimeToString(booking?.slotTimeEnd??'')}
                     </div>
                 </div>
                 <div className="d-flex">
